@@ -150,6 +150,87 @@
     .dot-blue { background: var(--accent); }
     .dot-purple { background: #7c3aed; }
     .dot-green { background: var(--success); }
+    .dot-orange { background: #f97316; }
+
+    /* ===================== CATEGORY CARDS ===================== */
+    .category-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 540px) {
+      .category-cards { grid-template-columns: 1fr; }
+    }
+    .category-card {
+      position: relative;
+      background: var(--surface2);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 14px 18px;
+      cursor: pointer;
+      font-family: var(--font);
+      text-align: center;
+      transition: all var(--trans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+    }
+    .category-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity var(--trans);
+    }
+    .category-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+    /* per-card accent colors */
+    .category-card.cat-mcq:hover,
+    .category-card.cat-mcq.active {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+    .category-card.cat-tf:hover,
+    .category-card.cat-tf.active {
+      border-color: #7c3aed;
+      background: var(--accent2-glow);
+    }
+    .category-card.cat-completion:hover,
+    .category-card.cat-completion.active {
+      border-color: #f97316;
+      background: rgba(249,115,22,0.12);
+    }
+    .cat-icon { font-size: 1.8rem; line-height: 1; margin-bottom: 2px; }
+    .cat-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .cat-count {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.3px;
+    }
+    .category-card.cat-mcq.active .cat-name { color: var(--accent); }
+    .category-card.cat-mcq.active .cat-count { color: var(--accent); opacity: 0.8; }
+    .category-card.cat-tf.active .cat-name { color: #a78bfa; }
+    .category-card.cat-tf.active .cat-count { color: #a78bfa; opacity: 0.8; }
+    .category-card.cat-completion.active .cat-name { color: #f97316; }
+    .category-card.cat-completion.active .cat-count { color: #f97316; opacity: 0.8; }
+    .active-pip {
+      position: absolute;
+      top: 8px; right: 10px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: none;
+    }
+    .category-card.active .active-pip { display: block; }
+    .cat-mcq .active-pip { background: var(--accent); }
+    .cat-tf .active-pip { background: #7c3aed; }
+    .cat-completion .active-pip { background: #f97316; }
 
     /* ===================== CONFIG CARD ===================== */
     .config-card { margin-top: 0; }
@@ -744,22 +825,37 @@
       <div class="home-hero fade-in">
         <div class="home-badge">📚 CS2102 Exam Prep</div>
         <h1 class="home-title">Data Structures<br>Revision Quiz</h1>
-        <p class="home-subtitle">MCQ &amp; True/False questions extracted directly from the CS2102 revision sheet. Sharpen your knowledge before the exam.</p>
+        <p class="home-subtitle">Three independent quiz sections from the CS2102 revision sheet. Pick a category, set your mode, and sharpen your knowledge.</p>
         <div class="stats-row">
-          <div class="stat-chip"><span class="dot dot-blue"></span>39 MCQ Questions</div>
-          <div class="stat-chip"><span class="dot dot-purple"></span>37 True/False</div>
-          <div class="stat-chip"><span class="dot dot-green"></span>7 Topics</div>
+          <div class="stat-chip"><span class="dot dot-blue"></span>39 Original MCQ</div>
+          <div class="stat-chip"><span class="dot dot-purple"></span>37 True / False</div>
+          <div class="stat-chip"><span class="dot dot-orange"></span>21 Completion MCQ</div>
         </div>
       </div>
 
       <div class="card config-card fade-in">
-        <!-- Question Type -->
+        <!-- Category Selection -->
         <div class="config-group">
-          <div class="section-label">Question Type</div>
-          <div class="btn-group">
-            <button class="toggle-btn active" id="type-mixed" onclick="setType('mixed')">🔀 Mixed</button>
-            <button class="toggle-btn" id="type-mcq" onclick="setType('mcq')">📋 MCQ Only</button>
-            <button class="toggle-btn" id="type-tf" onclick="setType('tf')">✅ True / False Only</button>
+          <div class="section-label">Quiz Category</div>
+          <div class="category-cards">
+            <button class="category-card cat-mcq active" id="cat-mcq" onclick="setCategory('mcq')">
+              <span class="active-pip"></span>
+              <span class="cat-icon">📋</span>
+              <span class="cat-name">Original MCQ</span>
+              <span class="cat-count">39 questions</span>
+            </button>
+            <button class="category-card cat-tf" id="cat-tf" onclick="setCategory('tf')">
+              <span class="active-pip"></span>
+              <span class="cat-icon">✅</span>
+              <span class="cat-name">True / False</span>
+              <span class="cat-count">37 questions</span>
+            </button>
+            <button class="category-card cat-completion" id="cat-completion" onclick="setCategory('completion')">
+              <span class="active-pip"></span>
+              <span class="cat-icon">✏️</span>
+              <span class="cat-name">Completion MCQ</span>
+              <span class="cat-count">21 questions</span>
+            </button>
           </div>
         </div>
 
@@ -779,7 +875,7 @@
         <div class="config-group">
           <div class="section-label">Number of Questions</div>
           <div class="range-row">
-            <input type="range" id="q-count-slider" min="5" max="76" value="20" step="1"
+            <input type="range" id="q-count-slider" min="5" max="97" value="20" step="1"
               oninput="updateQCount(this.value)" />
             <span class="range-val" id="q-count-val">20</span>
           </div>
@@ -1516,6 +1612,188 @@ const QUESTIONS = [
     choices: ["True", "False"],
     correctAnswer: "False",
     explanation: "A DAG (Directed Acyclic Graph) contains NO cycles at all — that is the definition of 'acyclic'."
+  },
+
+  // ══════════════════════════════════════
+  //   COMPLETION TO MCQ — Part 3 Fill in the Blanks
+  // ══════════════════════════════════════
+
+  // ── Introduction ──
+  {
+    id: 77, type: "mcq", topic: "Completion MCQ – Introduction",
+    originalBlank: "The three things needed to understand a data structure are: (1) how information is arranged in memory, (2) algorithms for manipulating the data, and (3) its _____________ characteristics.",
+    question: "To fully understand a data structure, you need to know its logical organisation, algorithms for manipulating it, and its _____________ characteristics.",
+    choices: ["performance", "hardware", "syntactic", "user-interface"],
+    correctAnswer: "performance",
+    explanation: "The third pillar is performance (mathematical) characteristics — how efficiently the structure uses time and space."
+  },
+  {
+    id: 78, type: "mcq", topic: "Completion MCQ – Introduction",
+    originalBlank: "Checking whether a stack is full before inserting an element is called checking for _____________.",
+    question: "Before pushing an element onto an array-based stack, the stack should first be checked for _____________.",
+    choices: ["overflow", "underflow", "null pointer", "index collision"],
+    correctAnswer: "overflow",
+    explanation: "Overflow occurs when you try to push onto a full stack. Checking for it prevents data corruption."
+  },
+  {
+    id: 79, type: "mcq", topic: "Completion MCQ – Introduction",
+    originalBlank: "The two foundational data structures used as underlying organizational techniques are the array and the _____________.",
+    question: "Arrays and _____________ are the two foundational data structures used as underlying organisational techniques for building more complex structures.",
+    choices: ["linked list", "binary tree", "hash table", "stack"],
+    correctAnswer: "linked list",
+    explanation: "Arrays (contiguous) and linked lists (pointer-based) are the two primitive organisational techniques on which all other structures are built."
+  },
+  {
+    id: 80, type: "mcq", topic: "Completion MCQ – Introduction",
+    originalBlank: "In a tree, the special node from which all other nodes descend is called the _____________.",
+    question: "In a tree, the special node from which all other nodes descend is called the _____________.",
+    choices: ["root", "leaf", "parent", "sibling"],
+    correctAnswer: "root",
+    explanation: "The root is the unique top-level node with no parent; every other node in the tree descends from it."
+  },
+  {
+    id: 81, type: "mcq", topic: "Completion MCQ – Introduction",
+    originalBlank: "A binary tree is a tree where each node has at most _____________ children.",
+    question: "A binary tree is defined as a tree in which each node has at most _____________ children.",
+    choices: ["two", "one", "three", "four"],
+    correctAnswer: "two",
+    explanation: "'Binary' means base-2; each node may have a left child, a right child, or neither, but never more than two."
+  },
+
+  // ── Memory & GC ──
+  {
+    id: 82, type: "mcq", topic: "Completion MCQ – Memory & GC",
+    originalBlank: "The stack holds an _____________ (address) for reference types, while the heap holds the actual _____________.",
+    question: "For a reference type variable, the call stack stores the _____________ of the object, while the heap stores the actual object data.",
+    choices: ["memory address (reference)", "value copy", "activation record", "garbage-collected pointer"],
+    correctAnswer: "memory address (reference)",
+    explanation: "The stack holds only the reference (address/pointer) to the heap object; the actual object fields live on the heap."
+  },
+  {
+    id: 83, type: "mcq", topic: "Completion MCQ – Memory & GC",
+    originalBlank: "An activation record (stack frame) stores the return address, parameters, and _____________.",
+    question: "An activation record (stack frame) stores the return address, method parameters, and _____________.",
+    choices: ["local variables", "heap references only", "garbage collection roots", "the program counter register"],
+    correctAnswer: "local variables",
+    explanation: "Each activation record captures the return address, parameters, AND local variables for one method invocation."
+  },
+  {
+    id: 84, type: "mcq", topic: "Completion MCQ – Memory & GC",
+    originalBlank: "When a method returns, its stack frame is _____________ from the stack.",
+    question: "When a method finishes executing and returns to its caller, its stack frame is _____________ from the call stack.",
+    choices: ["popped", "pushed", "compacted", "garbage collected"],
+    correctAnswer: "popped",
+    explanation: "Returning from a method pops its activation record off the LIFO call stack, restoring the caller's frame."
+  },
+  {
+    id: 85, type: "mcq", topic: "Completion MCQ – Memory & GC",
+    originalBlank: "A memory _____________ occurs when objects on the heap are no longer referenced but not freed in languages without GC.",
+    question: "In a language without automatic garbage collection, a _____________ occurs when heap objects are no longer referenced but the memory is never released.",
+    choices: ["memory leak", "stack overflow", "dangling pointer", "null dereference"],
+    correctAnswer: "memory leak",
+    explanation: "A memory leak happens when allocated heap memory is never freed, gradually exhausting available memory."
+  },
+  {
+    id: 86, type: "mcq", topic: "Completion MCQ – Memory & GC",
+    originalBlank: "For custom classes, use the _____________ method if you want to compare value equality rather than reference equality.",
+    question: "When comparing two custom class instances by their field values rather than by memory address, you should override the _____________ method.",
+    choices: ["Equals()", "CompareTo()", "ToString()", "GetHashCode()"],
+    correctAnswer: "Equals()",
+    explanation: "Overriding Equals() lets you define value-based equality for reference types instead of the default reference comparison."
+  },
+
+  // ── Stacks & Queues ──
+  {
+    id: 87, type: "mcq", topic: "Completion MCQ – Stacks & Queues",
+    originalBlank: "Stack insertion is called _____________, and deletion is called _____________.",
+    question: "The operation that adds an element to a stack is called _____________, and the operation that removes the top element is called _____________.",
+    choices: ["Push / Pop", "Enqueue / Dequeue", "Insert / Delete", "Add / Remove"],
+    correctAnswer: "Push / Pop",
+    explanation: "Push places an element on top of the stack; Pop removes and returns the top element. These are the standard stack operations."
+  },
+  {
+    id: 88, type: "mcq", topic: "Completion MCQ – Stacks & Queues",
+    originalBlank: "Queue insertion is called _____________, and deletion is called _____________.",
+    question: "The operation that adds an element to a queue is called _____________, and the operation that removes an element from the front is called _____________.",
+    choices: ["Enqueue / Dequeue", "Push / Pop", "Insert / Extract", "Offer / Poll"],
+    correctAnswer: "Enqueue / Dequeue",
+    explanation: "Enqueue adds to the rear; Dequeue removes from the front, maintaining the FIFO (First-In-First-Out) discipline."
+  },
+  {
+    id: 89, type: "mcq", topic: "Completion MCQ – Stacks & Queues",
+    originalBlank: "In an empty array-based stack, top is set to _____________.",
+    question: "In an array-based stack, what initial value is the 'top' index set to in order to indicate that the stack is empty?",
+    choices: ["-1", "0", "null", "1"],
+    correctAnswer: "-1",
+    explanation: "top = -1 signals an empty stack. After the first push, top becomes 0 (pointing to index 0 of the array)."
+  },
+  {
+    id: 90, type: "mcq", topic: "Completion MCQ – Stacks & Queues",
+    originalBlank: "In an empty array-based queue, front and rear are set to _____________.",
+    question: "In an array-based queue implementation, both 'front' and 'rear' are initialised to _____________ to represent an empty queue.",
+    choices: ["-1", "0", "null", "1"],
+    correctAnswer: "-1",
+    explanation: "Setting front = rear = -1 is a common sentinel value indicating no elements are currently in the queue."
+  },
+  {
+    id: 91, type: "mcq", topic: "Completion MCQ – Stacks & Queues",
+    originalBlank: "The balanced parenthesis problem uses a _____________ data structure.",
+    question: "The algorithm that checks whether an expression's parentheses, brackets, and braces are properly balanced is most naturally implemented using a _____________.",
+    choices: ["stack", "queue", "binary search tree", "linked list"],
+    correctAnswer: "stack",
+    explanation: "A stack's LIFO nature is perfect: push opening symbols and pop when a matching closing symbol is encountered."
+  },
+
+  // ── Recursion ──
+  {
+    id: 92, type: "mcq", topic: "Completion MCQ – Recursion",
+    originalBlank: "A problem-solving technique where a problem is solved by reducing it into smaller problems of the same form is called _____________.",
+    question: "Which problem-solving technique works by breaking a problem into smaller instances of the same problem until a trivial base case is reached?",
+    choices: ["Recursion", "Dynamic programming", "Greedy algorithm", "Divide-and-conquer iteration"],
+    correctAnswer: "Recursion",
+    explanation: "Recursion is the technique of solving a problem by reducing it to smaller problems of identical form, with a base case to terminate the process."
+  },
+  {
+    id: 93, type: "mcq", topic: "Completion MCQ – Recursion",
+    originalBlank: "Given sumDigits(n/10) + n%10, the base case for sumDigits(26587) is reached when the function is called with the argument _____________.",
+    question: "For the recursive function sumDigits(n) that uses sumDigits(n/10) + n%10 as its recursive case, the base case is triggered when the argument is _____________.",
+    choices: ["a single digit (n < 10)", "n == 0", "n == 1", "n < 100"],
+    correctAnswer: "a single digit (n < 10)",
+    explanation: "When n < 10, the number is a single digit and can be returned directly without further recursive calls."
+  },
+
+  // ── Graphs ──
+  {
+    id: 94, type: "mcq", topic: "Completion MCQ – Graphs",
+    originalBlank: "The degree of a vertex in an undirected graph is the number of _____________ incident on it.",
+    question: "In an undirected graph, the degree of a vertex is defined as the number of _____________ incident on that vertex.",
+    choices: ["edges", "vertices", "paths", "cycles"],
+    correctAnswer: "edges",
+    explanation: "Degree = number of edges touching a vertex. A self-loop counts twice toward the degree of its vertex."
+  },
+  {
+    id: 95, type: "mcq", topic: "Completion MCQ – Graphs",
+    originalBlank: "In an adjacency list representation, each vertex stores a _____________ of its neighboring vertices.",
+    question: "In an adjacency list representation of a graph, each vertex is associated with a _____________ containing its neighbouring vertices.",
+    choices: ["list", "matrix row", "binary tree", "hash set"],
+    correctAnswer: "list",
+    explanation: "Each vertex's entry in the adjacency list is a list (e.g., linked list or array) of the vertices it is connected to."
+  },
+  {
+    id: 96, type: "mcq", topic: "Completion MCQ – Graphs",
+    originalBlank: "Two edges that connect the same pair of vertices are called _____________ edges.",
+    question: "When two or more edges connect exactly the same pair of vertices in a graph, they are called _____________ edges.",
+    choices: ["parallel", "self-loop", "directed", "weighted"],
+    correctAnswer: "parallel",
+    explanation: "Parallel (or multiple) edges share the same two endpoints. A graph with no parallel edges and no self-loops is called a simple graph."
+  },
+  {
+    id: 97, type: "mcq", topic: "Completion MCQ – Graphs",
+    originalBlank: "A graph with relatively few edges (compared to the maximum possible) is called a _____________ graph.",
+    question: "A graph in which the number of edges is much smaller than the maximum possible (V²) is described as a _____________ graph.",
+    choices: ["sparse", "dense", "complete", "weighted"],
+    correctAnswer: "sparse",
+    explanation: "A sparse graph has E << V². An adjacency list is preferred over a matrix for sparse graphs to save O(V²) space."
   }
 ];
 
@@ -1523,7 +1801,7 @@ const QUESTIONS = [
    APP STATE
    ========================================================= */
 let state = {
-  questionType: 'mixed',
+  questionType: 'mcq',
   mode: 'study',
   timerSecs: 30,
   qCount: 20,
@@ -1545,13 +1823,15 @@ let state = {
 /* =========================================================
    HOME SCREEN LOGIC
    ========================================================= */
-function setType(t) {
-  state.questionType = t;
-  ['mixed','mcq','tf'].forEach(id => {
-    document.getElementById('type-'+id).classList.toggle('active', id === t);
+function setCategory(cat) {
+  state.questionType = cat;
+  ['mcq','tf','completion'].forEach(id => {
+    document.getElementById('cat-'+id).classList.toggle('active', id === cat);
   });
   updateMaxQuestions();
 }
+// Alias kept for any residual calls
+function setType(t) { setCategory(t); }
 
 function setMode(m) {
   state.mode = m;
@@ -1585,9 +1865,12 @@ function updateQCount(v) {
 }
 
 function getPool() {
-  if (state.questionType === 'mcq')    return QUESTIONS.filter(q => q.type === 'mcq');
-  if (state.questionType === 'tf')     return QUESTIONS.filter(q => q.type === 'true_false');
-  return QUESTIONS;
+  // Each category is strictly isolated — no mixing.
+  if (state.questionType === 'mcq')        return QUESTIONS.filter(q => q.type === 'mcq' && !q.originalBlank);
+  if (state.questionType === 'tf')         return QUESTIONS.filter(q => q.type === 'true_false');
+  if (state.questionType === 'completion') return QUESTIONS.filter(q => Boolean(q.originalBlank));
+  // Fallback: original MCQ only (should never be reached)
+  return QUESTIONS.filter(q => q.type === 'mcq' && !q.originalBlank);
 }
 
 function shuffle(arr) {
@@ -1974,10 +2257,10 @@ function goHome() {
    INIT
    ========================================================= */
 (function init() {
-  updateMaxQuestions();
+  setCategory('mcq');   // default: Original MCQ
   setMode('study');
   setTimer(30);
-  setType('mixed');
+  updateMaxQuestions();
 })();
 </script>
 </body>
