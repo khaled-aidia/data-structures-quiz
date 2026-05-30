@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Structures Revision Quiz | CS2102</title>
+  <meta name="description" content="Interactive MCQ and True/False quiz based on the CS2102 Data Structures revision sheet. Prepare for your exam with timed quizzes, study mode, and instant feedback." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ===================== CSS RESET & VARIABLES ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2330;
+      --surface3: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --text-dim: #6e7681;
+      --accent: #58a6ff;
+      --accent-glow: rgba(88,166,255,0.18);
+      --accent2: #7c3aed;
+      --accent2-glow: rgba(124,58,237,0.18);
+      --success: #3fb950;
+      --success-glow: rgba(63,185,80,0.18);
+      --danger: #f85149;
+      --danger-glow: rgba(248,81,73,0.18);
+      --warn: #e3b341;
+      --warn-glow: rgba(227,179,65,0.18);
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.4);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
+      --font: 'Inter', system-ui, sans-serif;
+      --trans: 0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ===================== BACKGROUND DECORATIONS ===================== */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; left: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(88,166,255,0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ===================== LAYOUT ===================== */
+    .app { position: relative; z-index: 1; }
+
+    .screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+    .screen.hidden { display: none !important; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      width: 100%;
+      max-width: 680px;
+      box-shadow: var(--shadow);
+    }
+
+    /* ===================== HOME SCREEN ===================== */
+    #home-screen { background: transparent; }
+
+    .home-hero {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .home-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(88,166,255,0.3);
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .home-title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #e6edf3 30%, #58a6ff 70%, #7c3aed 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .home-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin: 24px 0;
+    }
+    .stat-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-blue { background: var(--accent); }
+    .dot-purple { background: #7c3aed; }
+    .dot-green { background: var(--success); }
+
+    /* ===================== CONFIG CARD ===================== */
+    .config-card { margin-top: 0; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .config-group { margin-bottom: 24px; }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      min-width: 100px;
+      background: var(--surface3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: all var(--trans);
+      text-align: center;
+    }
+    .toggle-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: var(--accent-glow);
+    }
+    .toggle-btn.active {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .toggle-btn.mode-exam.active {
+      border-color: var(--warn);
+      background: var(--warn-glow);
+      color: var(--warn);
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .range-row input[type=range] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      outline: none;
+    }
+    .range-row input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .range-val {
+      min-width: 52px;
+      text-align: right;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+
+    /* ===================== BUTTONS ===================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      transition: all var(--trans);
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #58a6ff, #7c3aed);
+      color: #fff;
+      width: 100%;
+      font-size: 1rem;
+      padding: 15px;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 20px rgba(88,166,255,0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(88,166,255,0.45);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: var(--surface3);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      font-size: 0.82rem;
+    }
+    .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+
+    .btn-icon {
+      padding: 10px;
+      background: var(--surface3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all var(--trans);
+    }
+    .btn-icon:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+    /* ===================== QUIZ SCREEN ===================== */
+    #quiz-screen { padding-top: 16px; padding-bottom: 32px; justify-content: flex-start; }
+
+    .quiz-topbar {
+      width: 100%;
+      max-width: 720px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      min-width: 160px;
+    }
+    .progress-label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .progress-bar-outer {
+      height: 5px;
+      background: var(--surface3);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #58a6ff, #7c3aed);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .badge-timer {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      color: var(--text);
+    }
+    .badge-timer.warning {
+      border-color: var(--warn);
+      background: var(--warn-glow);
+      color: var(--warn);
+      animation: pulse-warn 1s ease-in-out infinite;
+    }
+    .badge-timer.danger {
+      border-color: var(--danger);
+      background: var(--danger-glow);
+      color: var(--danger);
+      animation: pulse-danger 0.6s ease-in-out infinite;
+    }
+    @keyframes pulse-warn {
+      0%,100% { box-shadow: 0 0 0 0 var(--warn-glow); }
+      50% { box-shadow: 0 0 0 4px var(--warn-glow); }
+    }
+    @keyframes pulse-danger {
+      0%,100% { box-shadow: 0 0 0 0 var(--danger-glow); }
+      50% { box-shadow: 0 0 0 5px var(--danger-glow); }
+    }
+    .badge-score {
+      background: var(--success-glow);
+      border: 1.5px solid rgba(63,185,80,0.4);
+      color: var(--success);
+    }
+
+    .quiz-card {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .q-type-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .q-type-mcq { color: var(--accent); border-color: rgba(88,166,255,0.4); background: var(--accent-glow); }
+    .q-type-tf { color: #7c3aed; border-color: rgba(124,58,237,0.4); background: var(--accent2-glow); }
+
+    .q-topic {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .q-text {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 24px;
+      min-height: 64px;
+    }
+
+    /* ===================== CHOICES ===================== */
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      text-align: left;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      transition: all var(--trans);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+    .choice-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent, rgba(88,166,255,0.04));
+      opacity: 0;
+      transition: opacity var(--trans);
+    }
+    .choice-btn:hover:not(:disabled)::before { opacity: 1; }
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      transform: translateX(3px);
+    }
+    .choice-btn:disabled { cursor: default; transform: none; }
+
+    .choice-label {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: var(--surface3);
+      border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: all var(--trans);
+    }
+    .choice-btn:hover:not(:disabled) .choice-label {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .choice-btn.selected .choice-label { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+
+    .choice-btn.correct {
+      border-color: var(--success);
+      background: var(--success-glow);
+    }
+    .choice-btn.correct .choice-label {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+    .choice-btn.wrong {
+      border-color: var(--danger);
+      background: var(--danger-glow);
+    }
+    .choice-btn.wrong .choice-label {
+      background: var(--danger);
+      border-color: var(--danger);
+      color: #fff;
+    }
+
+    /* True/False big buttons */
+    .tf-choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .tf-btn {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px 16px;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      transition: all var(--trans);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .tf-btn .tf-icon { font-size: 2rem; }
+    .tf-btn:hover:not(:disabled) { transform: translateY(-3px); box-shadow: var(--shadow); }
+    .tf-btn.true-btn:hover:not(:disabled) { border-color: var(--success); background: var(--success-glow); color: var(--success); }
+    .tf-btn.false-btn:hover:not(:disabled) { border-color: var(--danger); background: var(--danger-glow); color: var(--danger); }
+    .tf-btn:disabled { cursor: default; transform: none !important; }
+
+    .tf-btn.correct.true-btn  { border-color: var(--success); background: var(--success-glow); color: var(--success); }
+    .tf-btn.correct.false-btn { border-color: var(--success); background: var(--success-glow); color: var(--success); }
+    .tf-btn.wrong.true-btn    { border-color: var(--danger);  background: var(--danger-glow);  color: var(--danger);  }
+    .tf-btn.wrong.false-btn   { border-color: var(--danger);  background: var(--danger-glow);  color: var(--danger);  }
+
+    /* ===================== FEEDBACK ===================== */
+    .feedback-box {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      animation: slideInUp 0.3s ease;
+    }
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .feedback-box.correct-fb {
+      background: var(--success-glow);
+      border: 1px solid rgba(63,185,80,0.4);
+      color: var(--success);
+    }
+    .feedback-box.wrong-fb {
+      background: var(--danger-glow);
+      border: 1px solid rgba(248,81,73,0.35);
+      color: var(--danger);
+    }
+    .feedback-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .feedback-content strong { display: block; margin-bottom: 2px; font-size: 0.9rem; }
+    .feedback-content span { color: var(--text-muted); font-size: 0.85rem; }
+
+    .quiz-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .btn-next {
+      background: linear-gradient(135deg, #58a6ff, #7c3aed);
+      color: #fff;
+      padding: 12px 28px;
+      font-size: 0.9rem;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      font-weight: 600;
+      transition: all var(--trans);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 14px rgba(88,166,255,0.3);
+    }
+    .btn-next:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(88,166,255,0.4); }
+    .btn-next:active { transform: none; }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ===================== RESULT SCREEN ===================== */
+    #result-screen { justify-content: flex-start; padding-top: 32px; }
+
+    .result-header { text-align: center; margin-bottom: 28px; }
+    .result-emoji { font-size: 3.5rem; margin-bottom: 12px; }
+    .result-title { font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; }
+    .result-subtitle { color: var(--text-muted); font-size: 0.9rem; }
+
+    .score-ring-wrap { display: flex; justify-content: center; margin: 24px 0; }
+    .score-ring {
+      position: relative;
+      width: 140px; height: 140px;
+    }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-pct { font-size: 2rem; font-weight: 800; color: var(--text); }
+    .score-label-sm { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-box .val { font-size: 1.5rem; font-weight: 800; }
+    .stat-box .lbl { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+    .stat-box.correct .val { color: var(--success); }
+    .stat-box.wrong .val { color: var(--danger); }
+    .stat-box.accent .val { color: var(--accent); }
+    .stat-box.warn .val { color: var(--warn); }
+
+    /* ===================== REVIEW ===================== */
+    #review-section { margin-top: 24px; }
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .review-title { font-size: 1rem; font-weight: 700; }
+    .review-count {
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      background: var(--danger-glow);
+      border: 1px solid rgba(248,81,73,0.3);
+      border-radius: 999px;
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .review-item {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 10px;
+      transition: border-color var(--trans);
+    }
+    .review-item:hover { border-color: rgba(248,81,73,0.4); }
+
+    .review-q {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .review-answers {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.8rem;
+    }
+    .review-your {
+      color: var(--danger);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .review-correct {
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .review-label { font-weight: 600; }
+
+    .result-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .result-actions .btn { flex: 1; min-width: 140px; }
+
+    /* ===================== MODE INDICATOR ===================== */
+    .mode-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+    .mode-study { background: var(--success-glow); border: 1px solid rgba(63,185,80,0.35); color: var(--success); }
+    .mode-exam  { background: var(--warn-glow);    border: 1px solid rgba(227,179,65,0.35); color: var(--warn); }
+
+    /* ===================== TRANSITIONS ===================== */
+    .fade-in {
+      animation: fadeIn 0.35s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .slide-in {
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 480px) {
+      .card { padding: 24px 18px; }
+      .tf-choices { gap: 10px; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .result-actions { flex-direction: column; }
+      .quiz-topbar { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ==================== HOME SCREEN ==================== -->
+  <div id="home-screen" class="screen">
+    <div style="width:100%;max-width:680px;">
+      <div class="home-hero fade-in">
+        <div class="home-badge">📚 CS2102 Exam Prep</div>
+        <h1 class="home-title">Data Structures<br>Revision Quiz</h1>
+        <p class="home-subtitle">MCQ &amp; True/False questions extracted directly from the CS2102 revision sheet. Sharpen your knowledge before the exam.</p>
+        <div class="stats-row">
+          <div class="stat-chip"><span class="dot dot-blue"></span>39 MCQ Questions</div>
+          <div class="stat-chip"><span class="dot dot-purple"></span>37 True/False</div>
+          <div class="stat-chip"><span class="dot dot-green"></span>7 Topics</div>
+        </div>
+      </div>
+
+      <div class="card config-card fade-in">
+        <!-- Question Type -->
+        <div class="config-group">
+          <div class="section-label">Question Type</div>
+          <div class="btn-group">
+            <button class="toggle-btn active" id="type-mixed" onclick="setType('mixed')">🔀 Mixed</button>
+            <button class="toggle-btn" id="type-mcq" onclick="setType('mcq')">📋 MCQ Only</button>
+            <button class="toggle-btn" id="type-tf" onclick="setType('tf')">✅ True / False Only</button>
+          </div>
+        </div>
+
+        <!-- Mode -->
+        <div class="config-group">
+          <div class="section-label">Quiz Mode</div>
+          <div class="btn-group">
+            <button class="toggle-btn active" id="mode-study" onclick="setMode('study')">💡 Study Mode</button>
+            <button class="toggle-btn mode-exam" id="mode-exam" onclick="setMode('exam')">🎓 Exam Mode</button>
+          </div>
+          <p style="margin-top:8px;font-size:0.78rem;color:var(--text-dim);" id="mode-desc">Study mode gives instant feedback after every answer.</p>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- Number of Questions -->
+        <div class="config-group">
+          <div class="section-label">Number of Questions</div>
+          <div class="range-row">
+            <input type="range" id="q-count-slider" min="5" max="76" value="20" step="1"
+              oninput="updateQCount(this.value)" />
+            <span class="range-val" id="q-count-val">20</span>
+          </div>
+        </div>
+
+        <!-- Timer -->
+        <div class="config-group" style="margin-bottom:0;">
+          <div class="section-label">Timer per Question</div>
+          <div class="btn-group">
+            <button class="toggle-btn active" id="timer-30" onclick="setTimer(30)">⏱ 30s</button>
+            <button class="toggle-btn" id="timer-60" onclick="setTimer(60)">⏱ 60s</button>
+            <button class="toggle-btn" id="timer-90" onclick="setTimer(90)">⏱ 90s</button>
+            <button class="toggle-btn" id="timer-none" onclick="setTimer(0)">♾ No Limit</button>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <button class="btn btn-primary" onclick="startQuiz()" id="start-btn">
+          🚀 Start Quiz
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== QUIZ SCREEN ==================== -->
+  <div id="quiz-screen" class="screen hidden">
+    <div class="quiz-topbar">
+      <div class="progress-wrap">
+        <div class="progress-label" id="progress-label">Question 1 of 20</div>
+        <div class="progress-bar-outer">
+          <div class="progress-bar-inner" id="progress-bar" style="width:5%"></div>
+        </div>
+      </div>
+      <span class="badge badge-timer" id="timer-badge">⏱ --</span>
+      <span class="badge badge-score" id="score-badge">✓ 0</span>
+      <span class="mode-indicator" id="mode-badge">💡 Study</span>
+      <button class="btn-icon" title="Back to Home" onclick="confirmExit()">✕</button>
+    </div>
+
+    <div class="card quiz-card fade-in" id="quiz-card">
+      <div class="q-meta">
+        <span class="q-type-badge" id="q-type-badge">MCQ</span>
+        <span class="q-topic" id="q-topic">Topic</span>
+      </div>
+      <div class="q-text" id="q-text">Question text here</div>
+      <div id="choices-container"></div>
+      <div id="feedback-container"></div>
+      <div class="quiz-actions">
+        <span id="answered-hint" style="font-size:0.8rem;color:var(--text-dim);">Select an answer</span>
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()" disabled>
+          Next <span>→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESULT SCREEN ==================== -->
+  <div id="result-screen" class="screen hidden">
+    <div class="card fade-in" style="max-width:680px;">
+      <div class="result-header">
+        <div class="result-emoji" id="result-emoji">🎉</div>
+        <div class="result-title" id="result-title">Quiz Complete!</div>
+        <div class="result-subtitle" id="result-subtitle">Here's how you did</div>
+      </div>
+
+      <div class="score-ring-wrap">
+        <div class="score-ring">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="var(--surface3)" stroke-width="10"/>
+            <circle cx="70" cy="70" r="58" fill="none" stroke="url(#ring-gradient)"
+              stroke-width="10" stroke-linecap="round"
+              stroke-dasharray="364.4" stroke-dashoffset="364.4" id="ring-progress"/>
+            <defs>
+              <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#58a6ff"/>
+                <stop offset="100%" stop-color="#3fb950"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="score-ring-text">
+            <span class="score-pct" id="score-pct">0%</span>
+            <span class="score-label-sm">Score</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box correct"><div class="val" id="r-correct">0</div><div class="lbl">✅ Correct</div></div>
+        <div class="stat-box wrong"><div class="val" id="r-wrong">0</div><div class="lbl">❌ Incorrect</div></div>
+        <div class="stat-box accent"><div class="val" id="r-total">0</div><div class="lbl">📝 Answered</div></div>
+        <div class="stat-box warn"><div class="val" id="r-time">--</div><div class="lbl">⏱ Time Used</div></div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-secondary" onclick="showReview()" id="review-btn">📋 Review Wrong</button>
+        <button class="btn btn-primary" onclick="restartQuiz()">🔄 Restart</button>
+        <button class="btn btn-ghost" onclick="goHome()">🏠 Home</button>
+      </div>
+
+      <div id="review-section" style="display:none;">
+        <hr class="divider" />
+        <div class="review-header">
+          <span class="review-title">Wrong Answers Review</span>
+          <span class="review-count" id="review-count">0 Wrong</span>
+        </div>
+        <div id="review-list"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .app -->
+
+<script>
+/* ========================================================
+   QUESTION DATA — extracted from CS2102 Revision Sheet PDF
+   ======================================================== */
+const QUESTIONS = [
+  // ── MCQ: Introduction to Data Structures ──
+  {
+    id: 1, type: "mcq", topic: "Introduction to Data Structures",
+    question: "Which of the following is NOT a primitive data structure?",
+    choices: ["Integer", "Boolean", "Array", "Character"],
+    correctAnswer: "Array",
+    explanation: "Arrays are non-primitive (composite) data structures; integers, booleans, and characters are primitives."
+  },
+  {
+    id: 2, type: "mcq", topic: "Introduction to Data Structures",
+    question: "A data structure that stores elements in a sequential or linear order is called a:",
+    choices: ["Non-linear data structure", "Primitive data structure", "Linear data structure", "Composite data structure"],
+    correctAnswer: "Linear data structure",
+    explanation: "Linear data structures store elements sequentially (e.g., arrays, linked lists, stacks, queues)."
+  },
+  {
+    id: 3, type: "mcq", topic: "Stacks & Queues",
+    question: "In a Stack, the operation to remove an element is called:",
+    choices: ["Enqueue", "Push", "Insert", "Pop"],
+    correctAnswer: "Pop",
+    explanation: "Pop removes the top element from a stack; Push adds an element to the top."
+  },
+  {
+    id: 4, type: "mcq", topic: "Introduction to Data Structures",
+    question: "Which data structure follows the First-In-First-Out (FIFO) principle?",
+    choices: ["Stack", "Queue", "Linked List", "Tree"],
+    correctAnswer: "Queue",
+    explanation: "Queues follow FIFO — the first element inserted is the first one removed."
+  },
+  // ── MCQ: Memory, Types, and Garbage Collection ──
+  {
+    id: 5, type: "mcq", topic: "Memory & Garbage Collection",
+    question: "Which memory structure is LIFO and stores local variables and method parameters?",
+    choices: ["Heap", "Stack", "Garbage Collector", "Activation record"],
+    correctAnswer: "Stack",
+    explanation: "The call stack is LIFO and holds local variables, parameters, and return addresses via activation records."
+  },
+  {
+    id: 6, type: "mcq", topic: "Memory & Garbage Collection",
+    question: "Where is the actual data of a reference type stored?",
+    choices: ["Stack only", "Heap only", "Both stack and heap", "CPU registers"],
+    correctAnswer: "Heap only",
+    explanation: "The actual object data is stored on the heap. The stack only holds the reference (pointer/address) to that heap object — not the data itself."
+  },
+  {
+    id: 7, type: "mcq", topic: "Memory & Garbage Collection",
+    question: "What happens when you assign one reference type variable to another (obj2 = obj1)?",
+    choices: [
+      "A deep copy is created",
+      "The object is moved to the stack",
+      "Both variables point to the same object on the heap",
+      "The original object is garbage collected"
+    ],
+    correctAnswer: "Both variables point to the same object on the heap",
+    explanation: "Reference assignment copies the address, so both variables refer to the same heap object."
+  },
+  {
+    id: 8, type: "mcq", topic: "Memory & Garbage Collection",
+    question: "What is the most common cause of a stack overflow?",
+    choices: ["Too many heap allocations", "Infinite recursion", "Value types in a loop", "Manual memory management"],
+    correctAnswer: "Infinite recursion",
+    explanation: "Infinite recursion keeps pushing activation records onto the call stack until it runs out of space."
+  },
+  {
+    id: 9, type: "mcq", topic: "Memory & Garbage Collection",
+    question: "In .NET, who is responsible for deallocating heap memory?",
+    choices: ["The programmer (free())", "The OS", "The garbage collector", "The stack pointer"],
+    correctAnswer: "The garbage collector",
+    explanation: "The .NET garbage collector automatically reclaims heap memory for unreachable objects."
+  },
+  // ── MCQ: Asymptotic Analysis ──
+  {
+    id: 10, type: "mcq", topic: "Asymptotic Analysis",
+    question: "Which is the primary focus of asymptotic analysis?",
+    choices: [
+      "Exact running time in ms",
+      "Behavior as input size grows very large",
+      "Memory usage on a specific machine",
+      "CPU power consumption"
+    ],
+    correctAnswer: "Behavior as input size grows very large",
+    explanation: "Asymptotic analysis studies how algorithm performance scales as input size n approaches infinity."
+  },
+  {
+    id: 11, type: "mcq", topic: "Asymptotic Analysis",
+    question: "What does Big-O notation primarily describe?",
+    choices: [
+      "Average case",
+      "Best case",
+      "Upper bound (worst case) growth rate",
+      "Exact number of operations"
+    ],
+    correctAnswer: "Upper bound (worst case) growth rate",
+    explanation: "Big-O gives an upper bound on growth rate — the worst-case scenario for algorithm complexity."
+  },
+  {
+    id: 12, type: "mcq", topic: "Asymptotic Analysis",
+    question: "If f(n) = 3n² + 5n + 2, which Big-O simplification is correct?",
+    choices: ["O(n)", "O(n log n)", "O(n²)", "O(2ⁿ)"],
+    correctAnswer: "O(n²)",
+    explanation: "In Big-O, we keep the dominant term and drop constants: 3n² dominates, giving O(n²)."
+  },
+  {
+    id: 13, type: "mcq", topic: "Asymptotic Analysis",
+    question: "What is the time complexity of a simple loop from i = 0 to i < n with constant-time operations inside?",
+    choices: ["O(1)", "O(log n)", "O(n)", "O(n²)"],
+    correctAnswer: "O(n)",
+    explanation: "A single loop that runs n times with O(1) work inside has linear O(n) complexity."
+  },
+  {
+    id: 14, type: "mcq", topic: "Asymptotic Analysis",
+    question: "Which complexity is generally the fastest growing (least efficient) for large n?",
+    choices: ["O(n log n)", "O(n²)", "O(2ⁿ)", "O(n!)"],
+    correctAnswer: "O(n!)",
+    explanation: "O(n!) grows the fastest — it is the least efficient among common complexity classes."
+  },
+  // ── MCQ: Linked Lists ──
+  {
+    id: 15, type: "mcq", topic: "Linked Lists",
+    question: "What is the primary difference between an array and a linked list regarding memory allocation?",
+    choices: [
+      "Arrays are dynamic, Linked Lists are static",
+      "Arrays use pointers, Linked Lists use indices",
+      "Arrays store elements contiguously, Linked Lists store non-contiguously",
+      "Arrays cannot store integers"
+    ],
+    correctAnswer: "Arrays store elements contiguously, Linked Lists store non-contiguously",
+    explanation: "Arrays occupy a contiguous block of memory; linked list nodes are scattered with pointers connecting them."
+  },
+  {
+    id: 16, type: "mcq", topic: "Linked Lists",
+    question: "In a singly linked list, each node consists of which two components?",
+    choices: ["Key and Value", "Index and Pointer", "Data and next pointer", "Data and prev pointer"],
+    correctAnswer: "Data and next pointer",
+    explanation: "Each singly linked list node holds data and a next pointer to the following node."
+  },
+  {
+    id: 17, type: "mcq", topic: "Linked Lists",
+    question: "What does the next pointer of the last node in a singly linked list point to?",
+    choices: ["The first node", "Itself", "The previous node", "null"],
+    correctAnswer: "null",
+    explanation: "The last node's next pointer is null, signaling the end of the list."
+  },
+  {
+    id: 18, type: "mcq", topic: "Linked Lists",
+    question: "To insert a node at the beginning of a non-empty linked list (C#), which step is correct?",
+    choices: [
+      "head = temp; temp.next = head;",
+      "temp.next = head; head = temp;",
+      "head.next = temp; temp = head;",
+      "temp.next = null; head = temp;"
+    ],
+    correctAnswer: "temp.next = head; head = temp;",
+    explanation: "First link the new node to the current head, then update head to point to the new node."
+  },
+  {
+    id: 19, type: "mcq", topic: "Linked Lists",
+    question: "In the linked list reversal algorithm, what is the purpose of the 'next' variable?",
+    choices: [
+      "Store final head",
+      "Hold previous node",
+      "Store current node before pointer change",
+      "Store original head"
+    ],
+    correctAnswer: "Store current node before pointer change",
+    explanation: "The 'next' variable saves the next node before we overwrite the current node's next pointer during reversal."
+  },
+  // ── MCQ: Stacks & Queues ──
+  {
+    id: 20, type: "mcq", topic: "Stacks & Queues",
+    question: "A stack follows which principle?",
+    choices: ["FIFO", "LIFO", "Random Access", "Circular Order"],
+    correctAnswer: "LIFO",
+    explanation: "Stack = Last-In-First-Out. The most recently pushed element is the first to be popped."
+  },
+  {
+    id: 21, type: "mcq", topic: "Stacks & Queues",
+    question: "In a queue, insertion happens at the ____ and deletion at the ____.",
+    choices: ["front, rear", "top, bottom", "rear, front", "bottom, top"],
+    correctAnswer: "rear, front",
+    explanation: "Elements are enqueued at the rear and dequeued from the front, maintaining FIFO order."
+  },
+  {
+    id: 22, type: "mcq", topic: "Stacks & Queues",
+    question: "In an array-based stack, the top index is initialized to:",
+    choices: ["0", "1", "-1", "null"],
+    correctAnswer: "-1",
+    explanation: "top = -1 signals an empty stack; after the first push, top becomes 0."
+  },
+  {
+    id: 23, type: "mcq", topic: "Stacks & Queues",
+    question: "Which operation removes an element from a stack?",
+    choices: ["Enqueue", "Push", "Peek", "Pop"],
+    correctAnswer: "Pop",
+    explanation: "Pop removes and returns the top element; Peek only inspects it without removal."
+  },
+  {
+    id: 24, type: "mcq", topic: "Stacks & Queues",
+    question: "In a linked list implementation of a stack, where is a new node added during push?",
+    choices: ["At the end", "In the middle", "At the beginning", "After the rear"],
+    correctAnswer: "At the beginning",
+    explanation: "Pushing to a linked list stack adds the new node at the head for O(1) insertion and removal."
+  },
+  // ── MCQ: Recursion ──
+  {
+    id: 25, type: "mcq", topic: "Recursion",
+    question: "What are the two mandatory cases for any recursive algorithm?",
+    choices: [
+      "Iterative and Conditional",
+      "Simple and Complex",
+      "Base case and Recursive case",
+      "Start and End"
+    ],
+    correctAnswer: "Base case and Recursive case",
+    explanation: "Every correct recursive algorithm needs a base case (termination) and a recursive case (reduction)."
+  },
+  {
+    id: 26, type: "mcq", topic: "Recursion",
+    question: "What is the primary purpose of the base case?",
+    choices: [
+      "Make the function faster",
+      "Handle complex input",
+      "Provide a stopping condition with no recursive call",
+      "Call the function again with a smaller problem"
+    ],
+    correctAnswer: "Provide a stopping condition with no recursive call",
+    explanation: "The base case stops the recursion — it returns a result directly without further recursive calls."
+  },
+  {
+    id: 27, type: "mcq", topic: "Recursion",
+    question: "According to the lecture, what is the first step in the recursive case template?",
+    choices: [
+      "Reassemble results",
+      "Call the function on each subproblem",
+      "Break the problem into subproblems of same form",
+      "Test for simple case"
+    ],
+    correctAnswer: "Break the problem into subproblems of same form",
+    explanation: "Step 1 is decomposition — divide the problem into smaller instances of the same problem."
+  },
+  {
+    id: 28, type: "mcq", topic: "Recursion",
+    question: "What is the time complexity (number of moves) for the Tower of Hanoi with n disks?",
+    choices: ["n", "n²", "2ⁿ", "2ⁿ – 1"],
+    correctAnswer: "2ⁿ – 1",
+    explanation: "Tower of Hanoi requires exactly 2ⁿ – 1 moves for n disks."
+  },
+  // ── MCQ: Trees ──
+  {
+    id: 29, type: "mcq", topic: "Trees",
+    question: "In a binary tree, what is the maximum number of nodes on level i (root at level 0)?",
+    choices: ["i", "2i", "2ⁱ", "2ⁱ – 1"],
+    correctAnswer: "2ⁱ",
+    explanation: "At level i, a full binary tree has at most 2ⁱ nodes (level 0 = 1 node, level 1 = 2, etc.)."
+  },
+  {
+    id: 30, type: "mcq", topic: "Trees",
+    question: "What is the minimum possible height of a binary tree with 15 nodes?",
+    choices: ["15", "5", "4", "3"],
+    correctAnswer: "3",
+    explanation: "A complete binary tree with 15 nodes has height ⌊log₂(15)⌋ = 3."
+  },
+  {
+    id: 31, type: "mcq", topic: "Trees",
+    question: "In the sequential (array) representation, if a node is at index k, where is its left child?",
+    choices: ["k-1", "k+1", "2k", "2k+1"],
+    correctAnswer: "2k",
+    explanation: "In 1-indexed sequential representation: left child = 2k, right child = 2k+1."
+  },
+  {
+    id: 32, type: "mcq", topic: "Trees",
+    question: "A Binary Search Tree (BST) property requires that for any node:",
+    choices: [
+      "All left subtree keys are greater",
+      "All right subtree keys are less",
+      "All left subtree keys are less and all right subtree keys are greater",
+      "Left and right subtrees have same height"
+    ],
+    correctAnswer: "All left subtree keys are less and all right subtree keys are greater",
+    explanation: "BST property: left subtree has smaller keys, right subtree has larger keys than the node."
+  },
+  {
+    id: 33, type: "mcq", topic: "Trees",
+    question: "What is the time complexity for searching in a balanced BST with n nodes?",
+    choices: ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+    correctAnswer: "O(log n)",
+    explanation: "A balanced BST halves the search space at each step, giving O(log n) search time."
+  },
+  {
+    id: 34, type: "mcq", topic: "Trees",
+    question: "Which traversal visits the root after visiting both subtrees?",
+    choices: ["Preorder", "Inorder", "Postorder", "Level-order"],
+    correctAnswer: "Postorder",
+    explanation: "Postorder = Left → Right → Node (root visited last, after both subtrees)."
+  },
+  // ── MCQ: Graphs ──
+  {
+    id: 35, type: "mcq", topic: "Graphs",
+    question: "A tree is defined as:",
+    choices: [
+      "A graph with at least one cycle",
+      "A connected graph with no cycles",
+      "A graph where all vertices have degree 2",
+      "A disconnected graph with no edges"
+    ],
+    correctAnswer: "A connected graph with no cycles",
+    explanation: "A tree is an acyclic connected graph. It has exactly n–1 edges for n vertices."
+  },
+  {
+    id: 36, type: "mcq", topic: "Graphs",
+    question: "In an adjacency matrix for a graph with V vertices, the space complexity is:",
+    choices: ["O(V)", "O(V+E)", "O(V²)", "O(E)"],
+    correctAnswer: "O(V²)",
+    explanation: "An adjacency matrix allocates a V×V grid regardless of the number of edges, so O(V²) space."
+  },
+  {
+    id: 37, type: "mcq", topic: "Graphs",
+    question: "Which is a disadvantage of an adjacency matrix for a sparse graph?",
+    choices: [
+      "Difficult to implement",
+      "Edge lookup takes O(V) time",
+      "Consumes O(V²) space even with few edges",
+      "Cannot represent directed graphs"
+    ],
+    correctAnswer: "Consumes O(V²) space even with few edges",
+    explanation: "For sparse graphs (few edges), the V×V matrix wastes huge amounts of memory."
+  },
+  {
+    id: 38, type: "mcq", topic: "Graphs",
+    question: "In a directed graph, the total number of edges can be calculated by:",
+    choices: [
+      "Sum of all degrees / 2",
+      "Sum of all in-degrees",
+      "Sum of all out-degrees × 2",
+      "Sum of all in-degrees (or out-degrees)"
+    ],
+    correctAnswer: "Sum of all in-degrees (or out-degrees)",
+    explanation: "In a directed graph, each edge contributes 1 in-degree and 1 out-degree, so total edges = sum of in-degrees = sum of out-degrees."
+  },
+  // ── According to grading criterion MCQ ──
+  {
+    id: 39, type: "mcq", topic: "Introduction to Data Structures",
+    question: "According to the grading criterion, what is the weightage of the Final Exam?",
+    choices: ["20%", "40%", "50%", "60%"],
+    correctAnswer: "60%",
+    explanation: "According to the CS2102 grading criterion, the Final Exam carries 60% of the total grade (choice d)."
+  },
+
+  // ══════════════════════════════════════
+  //         TRUE / FALSE QUESTIONS
+  // ══════════════════════════════════════
+
+  // ── T/F: Introduction ──
+  {
+    id: 40, type: "true_false", topic: "Introduction to Data Structures",
+    question: "Non-primitive data structures are typically simpler and have a fixed size.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Non-primitive structures (arrays, lists, trees…) are more complex and can have dynamic sizes."
+  },
+  {
+    id: 41, type: "true_false", topic: "Introduction to Data Structures",
+    question: "A tree is a linear data structure where each node has at most two children.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Trees are non-linear hierarchical structures; a tree with at most two children per node is a binary tree."
+  },
+  {
+    id: 42, type: "true_false", topic: "Introduction to Data Structures",
+    question: "In a linked list, nodes are physically adjacent in memory.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Linked list nodes can be scattered anywhere in memory; pointers (next references) connect them logically."
+  },
+  {
+    id: 43, type: "true_false", topic: "Introduction to Data Structures",
+    question: "Understanding data structures helps in designing efficient algorithms.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "The choice of data structure directly impacts algorithm efficiency in time and space."
+  },
+  {
+    id: 44, type: "true_false", topic: "Introduction to Data Structures",
+    question: "A graph is defined as a collection of vertices and edges.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "By definition, a graph G = (V, E) is a set of vertices V and edges E connecting them."
+  },
+  // ── T/F: Memory & GC ──
+  {
+    id: 45, type: "true_false", topic: "Memory & Garbage Collection",
+    question: "Value types are stored entirely on the heap.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Value types (int, bool, struct…) are stored on the stack; reference types live on the heap."
+  },
+  {
+    id: 46, type: "true_false", topic: "Memory & Garbage Collection",
+    question: "The heap is faster than the stack for allocation and deallocation.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "The stack is faster — it just moves a stack pointer. The heap requires complex allocation and GC management."
+  },
+  {
+    id: 47, type: "true_false", topic: "Memory & Garbage Collection",
+    question: "Passing a value type to a method creates a copy of the data.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "Value types are passed by value — a copy of the data is placed on the called method's stack frame."
+  },
+  {
+    id: 48, type: "true_false", topic: "Memory & Garbage Collection",
+    question: "The garbage collector can compact the heap to reduce fragmentation.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "The .NET GC can compact the heap by moving live objects together, reducing memory fragmentation."
+  },
+  {
+    id: 49, type: "true_false", topic: "Memory & Garbage Collection",
+    question: "Two different class instances with identical field values will always return true when compared with ==.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "For reference types, == compares references (addresses) by default, not values. Use Equals() for value comparison."
+  },
+  // ── T/F: Asymptotic Analysis ──
+  {
+    id: 50, type: "true_false", topic: "Asymptotic Analysis",
+    question: "Asymptotic analysis depends heavily on the specific hardware and programming language.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Asymptotic analysis is machine-independent; it characterizes growth rate abstractly, regardless of hardware."
+  },
+  {
+    id: 51, type: "true_false", topic: "Asymptotic Analysis",
+    question: "An algorithm with O(log n) complexity is generally faster than O(n) for large inputs.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "log n grows much more slowly than n, so O(log n) algorithms are more efficient for large inputs."
+  },
+  {
+    id: 52, type: "true_false", topic: "Asymptotic Analysis",
+    question: "In Big-O analysis, coefficients (like the 5 in 5n) are kept because they significantly affect growth rate.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Big-O drops constant coefficients — 5n simplifies to O(n) because constants don't affect growth rate class."
+  },
+  {
+    id: 53, type: "true_false", topic: "Asymptotic Analysis",
+    question: "The experimental method (e.g., using Stopwatch) is completely independent of the software environment.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Experimental results depend on hardware, OS, background processes, and language runtime — not truly independent."
+  },
+  {
+    id: 54, type: "true_false", topic: "Asymptotic Analysis",
+    question: "A constant time algorithm is denoted as O(1).",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "O(1) means the algorithm takes the same amount of time regardless of input size."
+  },
+  // ── T/F: Linked Lists ──
+  {
+    id: 55, type: "true_false", topic: "Linked Lists",
+    question: "Linked lists can cause memory wastage because their size is fixed at compile time.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Linked lists are dynamic — they grow and shrink at runtime. Fixed size at compile time applies to arrays, not linked lists."
+  },
+  {
+    id: 56, type: "true_false", topic: "Linked Lists",
+    question: "To traverse a linked list, you must start from the head and follow next pointers.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "There is no random access in a linked list; you must traverse sequentially from head using next pointers."
+  },
+  {
+    id: 57, type: "true_false", topic: "Linked Lists",
+    question: "Inserting a node at the end of a singly linked list is always O(1) regardless of list size.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Without a tail pointer, you must traverse the entire list to find the end — that's O(n), not O(1)."
+  },
+  {
+    id: 58, type: "true_false", topic: "Linked Lists",
+    question: "When deleting the first node in C#, you must manually free the memory of the removed node.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "C# has garbage collection; once the reference is removed, the GC automatically reclaims the memory."
+  },
+  {
+    id: 59, type: "true_false", topic: "Linked Lists",
+    question: "The insertBefore operation requires special handling if the target node is the head.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "Inserting before the head requires updating head itself, which is handled differently than inserting before a middle node."
+  },
+  // ── T/F: Stacks & Queues ──
+  {
+    id: 60, type: "true_false", topic: "Stacks & Queues",
+    question: "A queue allows insertion and deletion at both ends.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "A standard queue inserts at the rear and deletes from the front only. A deque allows both ends."
+  },
+  {
+    id: 61, type: "true_false", topic: "Stacks & Queues",
+    question: "In an array-based stack, isFull() checks if top == data.length - 1.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "When top reaches the last valid index (data.length - 1), the stack is full."
+  },
+  {
+    id: 62, type: "true_false", topic: "Stacks & Queues",
+    question: "In a linked list queue, enqueue adds a node at the beginning.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Enqueue adds a node at the rear (end) of the linked list queue to maintain FIFO order."
+  },
+  {
+    id: 63, type: "true_false", topic: "Stacks & Queues",
+    question: "RPN (Reverse Polish Notation) uses the format: operand operator operand.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "RPN format is: operand operand operator (e.g., '4 2 +'), not operand-operator-operand (infix)."
+  },
+  {
+    id: 64, type: "true_false", topic: "Stacks & Queues",
+    question: "A linked list stack has no size restriction but uses extra memory for references.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "A linked list stack grows dynamically (no fixed limit) but each node requires extra memory for the next pointer."
+  },
+  // ── T/F: Recursion ──
+  {
+    id: 65, type: "true_false", topic: "Recursion",
+    question: "The function 'int sum(int n) { if (n==1) return 1; return n + sum(n-1); }' correctly implements the base case and will terminate for all positive integers.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "The base case (n==1) is correctly defined, and each call reduces n by 1, so it terminates for all positive n."
+  },
+  {
+    id: 66, type: "true_false", topic: "Recursion",
+    question: "In recursion, each recursive call should make progress toward the base case.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "This is the convergence rule — each recursive call must reduce the problem size toward the base case."
+  },
+  {
+    id: 67, type: "true_false", topic: "Recursion",
+    question: "This power function is correct if n is 0: 'float power(float x, int n) { if (n==0) return 1; return x * power(x, n-1); }'",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "The base case returns 1 for n=0 (any number to the power 0 is 1), which is mathematically correct."
+  },
+  // ── T/F: Trees ──
+  {
+    id: 68, type: "true_false", topic: "Trees",
+    question: "A tree is a linear data structure.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Trees are non-linear hierarchical data structures with a root and branching child nodes."
+  },
+  {
+    id: 69, type: "true_false", topic: "Trees",
+    question: "The root node of a tree has a parent but no children.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "The root node has NO parent — it is the top of the hierarchy. Leaf nodes have no children."
+  },
+  {
+    id: 70, type: "true_false", topic: "Trees",
+    question: "In a non-empty binary tree, the number of edges e = n - 1, where n is the number of nodes.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "Every node except the root has exactly one incoming edge, so edges = nodes − 1."
+  },
+  {
+    id: 71, type: "true_false", topic: "Trees",
+    question: "For a binary tree with 25 nodes, the array size needed for sequential representation is always 31.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "Array size depends on tree shape. A skewed tree may require exponentially more space; 'always 31' is incorrect."
+  },
+  {
+    id: 72, type: "true_false", topic: "Trees",
+    question: "In a BST, an inorder traversal always visits nodes in non-decreasing order.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "BST inorder (left → root → right) always produces keys in sorted (non-decreasing) order."
+  },
+  // ── T/F: Graphs ──
+  {
+    id: 73, type: "true_false", topic: "Graphs",
+    question: "A self-loop is an edge that connects two different vertices.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "A self-loop connects a vertex to itself — both endpoints of the edge are the same vertex."
+  },
+  {
+    id: 74, type: "true_false", topic: "Graphs",
+    question: "A graph is connected if there is a path from every vertex to every other vertex.",
+    choices: ["True", "False"],
+    correctAnswer: "True",
+    explanation: "Connectivity requires that all vertex pairs are reachable from each other via some path."
+  },
+  {
+    id: 75, type: "true_false", topic: "Graphs",
+    question: "Breadth First Search (BFS) uses a stack data structure.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "BFS uses a queue (FIFO) to explore nodes level by level. DFS uses a stack (LIFO)."
+  },
+  {
+    id: 76, type: "true_false", topic: "Graphs",
+    question: "A Directed Acyclic Graph (DAG) can contain at most one cycle.",
+    choices: ["True", "False"],
+    correctAnswer: "False",
+    explanation: "A DAG (Directed Acyclic Graph) contains NO cycles at all — that is the definition of 'acyclic'."
+  }
+];
+
+/* =========================================================
+   APP STATE
+   ========================================================= */
+let state = {
+  questionType: 'mixed',
+  mode: 'study',
+  timerSecs: 30,
+  qCount: 20,
+
+  // Runtime
+  questions: [],
+  currentIdx: 0,
+  score: 0,
+  answered: false,
+  selectedAnswer: null,
+  wrongAnswers: [],
+  startTime: null,
+  totalTimeUsed: 0,
+  timerInterval: null,
+  secsLeft: 0,
+  isReviewOpen: false,
+};
+
+/* =========================================================
+   HOME SCREEN LOGIC
+   ========================================================= */
+function setType(t) {
+  state.questionType = t;
+  ['mixed','mcq','tf'].forEach(id => {
+    document.getElementById('type-'+id).classList.toggle('active', id === t);
+  });
+  updateMaxQuestions();
+}
+
+function setMode(m) {
+  state.mode = m;
+  ['study','exam'].forEach(id => {
+    document.getElementById('mode-'+id).classList.toggle('active', id === m);
+  });
+  const desc = document.getElementById('mode-desc');
+  desc.textContent = m === 'study'
+    ? 'Study mode gives instant feedback after every answer.'
+    : 'Exam mode hides correctness until the end — just like the real thing.';
+}
+
+function setTimer(t) {
+  state.timerSecs = t;
+  [30,60,90,'none'].forEach(id => {
+    document.getElementById('timer-'+id).classList.toggle('active', id === t);
+  });
+}
+
+function updateMaxQuestions() {
+  const pool = getPool();
+  const slider = document.getElementById('q-count-slider');
+  slider.max = pool.length;
+  if (parseInt(slider.value) > pool.length) slider.value = pool.length;
+  updateQCount(slider.value);
+}
+
+function updateQCount(v) {
+  state.qCount = parseInt(v);
+  document.getElementById('q-count-val').textContent = v;
+}
+
+function getPool() {
+  if (state.questionType === 'mcq')    return QUESTIONS.filter(q => q.type === 'mcq');
+  if (state.questionType === 'tf')     return QUESTIONS.filter(q => q.type === 'true_false');
+  return QUESTIONS;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* =========================================================
+   START QUIZ
+   ========================================================= */
+function startQuiz() {
+  const pool = shuffle(getPool()).slice(0, state.qCount);
+  state.questions = pool.map(q => {
+    const shuffled = q.type === 'mcq' ? shuffle(q.choices) : q.choices;
+    return { ...q, shuffledChoices: shuffled };
+  });
+  state.currentIdx = 0;
+  state.score = 0;
+  state.wrongAnswers = [];
+  state.answered = false;
+  state.selectedAnswer = null;
+  state.startTime = Date.now();
+  state.totalTimeUsed = 0;
+
+  showScreen('quiz-screen');
+  updateModeBadge();
+  renderQuestion();
+}
+
+/* =========================================================
+   QUIZ RENDERING
+   ========================================================= */
+function renderQuestion() {
+  const q = state.questions[state.currentIdx];
+  state.answered = false;
+  state.selectedAnswer = null;
+
+  // Progress
+  const num = state.currentIdx + 1;
+  const total = state.questions.length;
+  document.getElementById('progress-label').textContent = `Question ${num} of ${total}`;
+  document.getElementById('progress-bar').style.width = `${(num / total) * 100}%`;
+
+  // Score
+  document.getElementById('score-badge').textContent = `✓ ${state.score}`;
+
+  // Type badge
+  const typeBadge = document.getElementById('q-type-badge');
+  if (q.type === 'mcq') {
+    typeBadge.textContent = 'MCQ'; typeBadge.className = 'q-type-badge q-type-mcq';
+  } else {
+    typeBadge.textContent = 'True / False'; typeBadge.className = 'q-type-badge q-type-tf';
+  }
+
+  document.getElementById('q-topic').textContent = q.topic;
+  document.getElementById('q-text').textContent = q.question;
+  document.getElementById('feedback-container').innerHTML = '';
+  document.getElementById('answered-hint').textContent = 'Select an answer';
+  document.getElementById('btn-next').disabled = true;
+
+  // Choices
+  const container = document.getElementById('choices-container');
+  container.innerHTML = '';
+
+  if (q.type === 'mcq') {
+    const labels = ['A', 'B', 'C', 'D'];
+    q.shuffledChoices.forEach((choice, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.id = `choice-${i}`;
+      btn.innerHTML = `<span class="choice-label">${labels[i]}</span><span>${choice}</span>`;
+      btn.onclick = () => selectAnswer(choice, btn);
+      container.appendChild(btn);
+    });
+  } else {
+    const tfDiv = document.createElement('div');
+    tfDiv.className = 'tf-choices';
+    ['True', 'False'].forEach(val => {
+      const btn = document.createElement('button');
+      btn.className = `tf-btn ${val.toLowerCase()}-btn`;
+      btn.id = `tf-${val.toLowerCase()}`;
+      btn.innerHTML = `<span class="tf-icon">${val === 'True' ? '✅' : '❌'}</span><span>${val}</span>`;
+      btn.onclick = () => selectAnswer(val, btn);
+      tfDiv.appendChild(btn);
+    });
+    container.appendChild(tfDiv);
+  }
+
+  // Timer
+  startTimer();
+
+  // Card animation
+  const card = document.getElementById('quiz-card');
+  card.classList.remove('slide-in');
+  void card.offsetWidth;
+  card.classList.add('slide-in');
+}
+
+function selectAnswer(answer, clickedBtn) {
+  if (state.answered) return;
+  state.answered = true;
+  state.selectedAnswer = answer;
+  clearTimer();
+
+  const q = state.questions[state.currentIdx];
+  const isCorrect = answer === q.correctAnswer;
+
+  if (isCorrect) state.score++;
+  else {
+    state.wrongAnswers.push({
+      question: q.question,
+      userAnswer: answer,
+      correctAnswer: q.correctAnswer,
+      type: q.type
+    });
+  }
+
+  // Disable all choices
+  const allBtns = document.querySelectorAll('.choice-btn, .tf-btn');
+  allBtns.forEach(b => b.disabled = true);
+
+  if (state.mode === 'study') {
+    // Highlight correct/wrong
+    if (q.type === 'mcq') {
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        const txt = btn.querySelector('span:last-child').textContent;
+        if (txt === q.correctAnswer) btn.classList.add('correct');
+        else if (btn === clickedBtn && !isCorrect) btn.classList.add('wrong');
+      });
+    } else {
+      document.querySelectorAll('.tf-btn').forEach(btn => {
+        const val = btn.textContent.trim().includes('True') ? 'True' : 'False';
+        if (val === q.correctAnswer) btn.classList.add('correct');
+        else if (btn === clickedBtn && !isCorrect) btn.classList.add('wrong');
+      });
+    }
+
+    // Show feedback
+    const fbContainer = document.getElementById('feedback-container');
+    fbContainer.innerHTML = `
+      <div class="feedback-box ${isCorrect ? 'correct-fb' : 'wrong-fb'}">
+        <span class="feedback-icon">${isCorrect ? '✅' : '❌'}</span>
+        <div class="feedback-content">
+          <strong>${isCorrect ? 'Correct!' : `Wrong — Correct answer: ${q.correctAnswer}`}</strong>
+          <span>${q.explanation}</span>
+        </div>
+      </div>`;
+  } else {
+    // Exam mode: minimal feedback
+    document.getElementById('answered-hint').textContent = isCorrect ? '✔ Answered' : '✘ Answered';
+  }
+
+  document.getElementById('answered-hint').textContent =
+    state.currentIdx + 1 < state.questions.length ? 'Answer recorded — click Next' : 'Answer recorded — click Finish';
+  document.getElementById('btn-next').disabled = false;
+  document.getElementById('btn-next').textContent =
+    state.currentIdx + 1 < state.questions.length ? 'Next →' : 'Finish 🏁';
+}
+
+/* =========================================================
+   TIMER
+   ========================================================= */
+function startTimer() {
+  clearTimer();
+  if (!state.timerSecs) {
+    document.getElementById('timer-badge').textContent = '⏱ ∞';
+    document.getElementById('timer-badge').className = 'badge badge-timer';
+    return;
+  }
+  state.secsLeft = state.timerSecs;
+  updateTimerDisplay();
+  state.timerInterval = setInterval(() => {
+    state.secsLeft--;
+    updateTimerDisplay();
+    if (state.secsLeft <= 0) {
+      clearTimer();
+      if (!state.answered) timeUp();
+    }
+  }, 1000);
+}
+
+function clearTimer() {
+  if (state.timerInterval) { clearInterval(state.timerInterval); state.timerInterval = null; }
+}
+
+function updateTimerDisplay() {
+  const badge = document.getElementById('timer-badge');
+  const s = state.secsLeft;
+  badge.textContent = `⏱ ${s}s`;
+  if (s <= 5)       badge.className = 'badge badge-timer danger';
+  else if (s <= 10) badge.className = 'badge badge-timer warning';
+  else              badge.className = 'badge badge-timer';
+}
+
+function timeUp() {
+  state.answered = true;
+  const q = state.questions[state.currentIdx];
+
+  state.wrongAnswers.push({
+    question: q.question,
+    userAnswer: '(Time ran out)',
+    correctAnswer: q.correctAnswer,
+    type: q.type
+  });
+
+  document.querySelectorAll('.choice-btn, .tf-btn').forEach(b => b.disabled = true);
+
+  if (state.mode === 'study') {
+    // Show correct answer
+    if (q.type === 'mcq') {
+      document.querySelectorAll('.choice-btn').forEach(btn => {
+        if (btn.querySelector('span:last-child').textContent === q.correctAnswer)
+          btn.classList.add('correct');
+      });
+    } else {
+      document.querySelectorAll('.tf-btn').forEach(btn => {
+        const val = btn.querySelector('span:last-child').textContent;
+        if (val === q.correctAnswer) btn.classList.add('correct');
+      });
+    }
+
+    document.getElementById('feedback-container').innerHTML = `
+      <div class="feedback-box wrong-fb">
+        <span class="feedback-icon">⏰</span>
+        <div class="feedback-content">
+          <strong>Time's Up! Correct answer: ${q.correctAnswer}</strong>
+          <span>${q.explanation}</span>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('answered-hint').textContent = 'Time ran out!';
+  document.getElementById('btn-next').disabled = false;
+  document.getElementById('btn-next').textContent =
+    state.currentIdx + 1 < state.questions.length ? 'Next →' : 'Finish 🏁';
+}
+
+/* =========================================================
+   NEXT QUESTION / FINISH
+   ========================================================= */
+function nextQuestion() {
+  clearTimer();
+  state.currentIdx++;
+  if (state.currentIdx >= state.questions.length) {
+    finishQuiz();
+  } else {
+    renderQuestion();
+  }
+}
+
+function finishQuiz() {
+  state.totalTimeUsed = Math.round((Date.now() - state.startTime) / 1000);
+  showResults();
+}
+
+/* =========================================================
+   RESULTS
+   ========================================================= */
+function showResults() {
+  showScreen('result-screen');
+
+  const total = state.questions.length;
+  const correct = state.score;
+  const wrong = total - correct;
+  const pct = Math.round((correct / total) * 100);
+
+  // Emoji & message
+  let emoji = '😐', title = 'Keep Practicing!';
+  if (pct >= 90) { emoji = '🏆'; title = 'Outstanding!'; }
+  else if (pct >= 75) { emoji = '🎉'; title = 'Great Job!'; }
+  else if (pct >= 60) { emoji = '👍'; title = 'Good Effort!'; }
+  else if (pct >= 40) { emoji = '📚'; title = 'Keep Studying!'; }
+  else { emoji = '💪'; title = 'More Practice Needed'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-subtitle').textContent =
+    `You answered ${correct} out of ${total} correctly in ${formatTime(state.totalTimeUsed)}.`;
+
+  document.getElementById('score-pct').textContent = `${pct}%`;
+  document.getElementById('r-correct').textContent = correct;
+  document.getElementById('r-wrong').textContent = wrong;
+  document.getElementById('r-total').textContent = total;
+  document.getElementById('r-time').textContent = formatTime(state.totalTimeUsed);
+
+  // Ring animation
+  const circumference = 2 * Math.PI * 58;
+  const offset = circumference - (pct / 100) * circumference;
+  const ring = document.getElementById('ring-progress');
+  ring.style.transition = 'none';
+  ring.style.strokeDashoffset = circumference;
+  setTimeout(() => {
+    ring.style.transition = 'stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1)';
+    ring.style.strokeDashoffset = offset;
+  }, 200);
+
+  // Review button
+  const reviewBtn = document.getElementById('review-btn');
+  reviewBtn.style.display = state.wrongAnswers.length > 0 ? '' : 'none';
+
+  // Collapse review
+  document.getElementById('review-section').style.display = 'none';
+  state.isReviewOpen = false;
+}
+
+function showReview() {
+  const section = document.getElementById('review-section');
+  if (state.isReviewOpen) {
+    section.style.display = 'none';
+    state.isReviewOpen = false;
+    document.getElementById('review-btn').textContent = '📋 Review Wrong';
+    return;
+  }
+
+  document.getElementById('review-count').textContent = `${state.wrongAnswers.length} Wrong`;
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+
+  state.wrongAnswers.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'review-item fade-in';
+    div.innerHTML = `
+      <div class="review-q">${i + 1}. ${item.question}</div>
+      <div class="review-answers">
+        <div class="review-your"><span class="review-label">Your answer:</span> ${item.userAnswer}</div>
+        <div class="review-correct"><span class="review-label">Correct answer:</span> ${item.correctAnswer}</div>
+      </div>`;
+    list.appendChild(div);
+  });
+
+  section.style.display = 'block';
+  state.isReviewOpen = true;
+  document.getElementById('review-btn').textContent = '📋 Hide Review';
+  section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+function showScreen(id) {
+  ['home-screen', 'quiz-screen', 'result-screen'].forEach(sid => {
+    document.getElementById(sid).classList.toggle('hidden', sid !== id);
+  });
+}
+
+function updateModeBadge() {
+  const badge = document.getElementById('mode-badge');
+  if (state.mode === 'study') {
+    badge.textContent = '💡 Study'; badge.className = 'mode-indicator mode-study';
+  } else {
+    badge.textContent = '🎓 Exam'; badge.className = 'mode-indicator mode-exam';
+  }
+}
+
+function formatTime(secs) {
+  if (secs < 60) return `${secs}s`;
+  const m = Math.floor(secs / 60), s = secs % 60;
+  return `${m}m ${s}s`;
+}
+
+function confirmExit() {
+  if (confirm('Exit quiz? Your progress will be lost.')) {
+    clearTimer();
+    goHome();
+  }
+}
+
+function restartQuiz() {
+  clearTimer();
+  startQuiz();
+}
+
+function goHome() {
+  clearTimer();
+  showScreen('home-screen');
+  updateMaxQuestions();
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+(function init() {
+  updateMaxQuestions();
+  setMode('study');
+  setTimer(30);
+  setType('mixed');
+})();
+</script>
+</body>
+</html>
