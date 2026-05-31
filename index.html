@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Data Structures Quiz | CS2102 Exam Prep</title>
+  <link rel="icon" href="favicon.ico" />
   <meta name="description" content="Premium interactive quiz for CS2102 Data Structures. Three isolated sections: Original MCQ, True/False, and Completion MCQ. Study mode, exam mode, timer, and full review." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -348,6 +349,8 @@ body {
 .dot-purple { background: var(--purple);  box-shadow: 0 0 6px var(--purple); }
 .dot-orange { background: var(--orange);  box-shadow: 0 0 6px var(--orange); }
 .dot-green  { background: var(--success); box-shadow: 0 0 6px var(--success); }
+.dot-rose   { background: #f43f5e; box-shadow: 0 0 6px #f43f5e; }
+.dot-yellow { background: #eab308; box-shadow: 0 0 6px #eab308; }
 
 /* ===================================================
    CONFIG CARD
@@ -371,15 +374,15 @@ body {
    CATEGORY CARDS
    =================================================== */
 .category-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
 }
-@media (max-width: 520px) {
-  .category-cards { grid-template-columns: 1fr; }
-}
-
 .category-card {
+  flex: 1 1 calc(33.33% - 12px);
+  min-width: 140px;
+  max-width: 240px;
   position: relative;
   background: rgba(255, 255, 255, 0.03);
   border: 1.5px solid rgba(255, 255, 255, 0.07);
@@ -405,6 +408,15 @@ body {
 /* Completion */
 .category-card.cat-completion:hover  { transform: translateY(-5px); border-color: rgba(249,115,22,0.38); box-shadow: 0 14px 44px rgba(249,115,22,0.12); }
 .category-card.cat-completion.active { border-color: rgba(249,115,22,0.42); background: rgba(249,115,22,0.07); box-shadow: 0 0 32px rgba(249,115,22,0.09); }
+/* Short Answer */
+.category-card.cat-sa:hover  { transform: translateY(-5px); border-color: rgba(16,185,129,0.38); box-shadow: 0 14px 44px rgba(16,185,129,0.12); }
+.category-card.cat-sa.active { border-color: rgba(16,185,129,0.42); background: rgba(16,185,129,0.07); box-shadow: 0 0 32px rgba(16,185,129,0.09); }
+/* Matching */
+.category-card.cat-matching:hover  { transform: translateY(-5px); border-color: rgba(244,63,94,0.38); box-shadow: 0 14px 44px rgba(244,63,94,0.12); }
+.category-card.cat-matching.active { border-color: rgba(244,63,94,0.42); background: rgba(244,63,94,0.07); box-shadow: 0 0 32px rgba(244,63,94,0.09); }
+/* Tracing */
+.category-card.cat-tracing:hover  { transform: translateY(-5px); border-color: rgba(234,179,8,0.38); box-shadow: 0 14px 44px rgba(234,179,8,0.12); }
+.category-card.cat-tracing.active { border-color: rgba(234,179,8,0.42); background: rgba(234,179,8,0.07); box-shadow: 0 0 32px rgba(234,179,8,0.09); }
 
 .cat-icon  { font-size: 2rem; line-height: 1; margin-bottom: 4px; }
 .cat-name  { font-size: 0.84rem; font-weight: 700; color: var(--text); line-height: 1.2; transition: color var(--trans); }
@@ -416,6 +428,12 @@ body {
 .category-card.cat-tf.active .cat-count        { color: rgba(139,92,246,0.7); }
 .category-card.cat-completion.active .cat-name  { color: var(--orange); }
 .category-card.cat-completion.active .cat-count { color: rgba(249,115,22,0.7); }
+.category-card.cat-sa.active .cat-name          { color: #10b981; }
+.category-card.cat-sa.active .cat-count         { color: rgba(16,185,129,0.7); }
+.category-card.cat-matching.active .cat-name    { color: #f43f5e; }
+.category-card.cat-matching.active .cat-count   { color: rgba(244,63,94,0.7); }
+.category-card.cat-tracing.active .cat-name     { color: #eab308; }
+.category-card.cat-tracing.active .cat-count    { color: rgba(234,179,8,0.7); }
 
 .active-pip {
   position: absolute;
@@ -429,6 +447,9 @@ body {
 .cat-mcq .active-pip        { background: var(--cyan);    box-shadow: 0 0 8px var(--cyan); }
 .cat-tf .active-pip         { background: var(--purple);  box-shadow: 0 0 8px var(--purple); }
 .cat-completion .active-pip { background: var(--orange);  box-shadow: 0 0 8px var(--orange); }
+.cat-sa .active-pip         { background: #10b981;        box-shadow: 0 0 8px #10b981; }
+.cat-matching .active-pip   { background: #f43f5e;        box-shadow: 0 0 8px #f43f5e; }
+.cat-tracing .active-pip    { background: #eab308;        box-shadow: 0 0 8px #eab308; }
 
 /* ===================================================
    TOGGLE BUTTONS
@@ -718,6 +739,16 @@ body {
   border-color: rgba(139, 92, 246, 0.3);
   background: rgba(139, 92, 246, 0.08);
 }
+.q-type-matching {
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.3);
+  background: rgba(244, 63, 94, 0.08);
+}
+.q-type-tracing {
+  color: #eab308;
+  border-color: rgba(234, 179, 8, 0.3);
+  background: rgba(234, 179, 8, 0.08);
+}
 
 .q-topic {
   font-size: 0.73rem;
@@ -733,6 +764,8 @@ body {
   color: var(--text);
   margin-bottom: 24px;
   min-height: 58px;
+  white-space: pre-wrap;
+  font-family: inherit;
 }
 
 /* ===================================================
@@ -1034,6 +1067,55 @@ body {
 }
 
 /* ===================================================
+   SHORT ANSWER STYLES
+   =================================================== */
+.sa-textarea {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  color: white;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  margin-bottom: 20px;
+  transition: all 0.2s;
+}
+.sa-textarea:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+.sa-actions {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.model-answer-box {
+  background: rgba(16, 185, 129, 0.05);
+  border-left: 4px solid #10b981;
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 20px;
+  animation: fadeIn 0.3s ease;
+}
+.model-answer-title {
+  font-size: 0.85rem;
+  color: #10b981;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.q-type-sa {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+/* ===================================================
    RESPONSIVE
    =================================================== */
 @media (max-width: 960px) {
@@ -1201,6 +1283,9 @@ body {
           <div class="stat-chip"><span class="dot dot-blue"></span>39 Original MCQ</div>
           <div class="stat-chip"><span class="dot dot-purple"></span>37 True / False</div>
           <div class="stat-chip"><span class="dot dot-orange"></span>21 Completion MCQ</div>
+          <div class="stat-chip"><span class="dot dot-green"></span>15 Short Answer</div>
+          <div class="stat-chip"><span class="dot dot-rose"></span>14 Matching MCQ</div>
+          <div class="stat-chip"><span class="dot dot-yellow"></span>14 Tracing & Apps</div>
         </div>
       </div>
 
@@ -1225,9 +1310,27 @@ body {
             </button>
             <button class="category-card cat-completion" id="cat-completion" onclick="setCategory('completion')">
               <span class="active-pip"></span>
-              <span class="cat-icon">✏️</span>
-              <span class="cat-name">Completion MCQ</span>
+              <span class="cat-icon">✍️</span>
+              <span class="cat-name">Completion</span>
               <span class="cat-count">21 questions</span>
+            </button>
+            <button class="category-card cat-sa" id="cat-sa" onclick="setCategory('sa')">
+              <span class="active-pip"></span>
+              <span class="cat-icon">📝</span>
+              <span class="cat-name">Short Answer</span>
+              <span class="cat-count">15 questions</span>
+            </button>
+            <button class="category-card cat-matching" id="cat-matching" onclick="setCategory('matching')">
+              <span class="active-pip"></span>
+              <span class="cat-icon">🔗</span>
+              <span class="cat-name">Matching MCQ</span>
+              <span class="cat-count">14 questions</span>
+            </button>
+            <button class="category-card cat-tracing" id="cat-tracing" onclick="setCategory('tracing')">
+              <span class="active-pip"></span>
+              <span class="cat-icon">🖥️</span>
+              <span class="cat-name">Tracing & Apps</span>
+              <span class="cat-count">14 questions</span>
             </button>
           </div>
         </div>
@@ -1364,6 +1467,69 @@ body {
 </div><!-- .app -->
 
 <script>
+/* ========================================================
+   MATCHING DATA
+   ======================================================== */
+const MATCHING_QUESTIONS = [
+  { id: 201, type: "mcq", topic: "Data Structures Matching", question: "Which data structure is a LIFO structure where insert/delete happen at the same end?", choices: ["Stack", "Queue", "Tree", "Linked List", "Graph"], correctAnswer: "Stack", explanation: "Stack uses Last-In-First-Out." },
+  { id: 202, type: "mcq", topic: "Data Structures Matching", question: "Which data structure is a FIFO structure with insertion at rear and deletion from front?", choices: ["Stack", "Queue", "Tree", "Linked List", "Graph"], correctAnswer: "Queue", explanation: "Queue uses First-In-First-Out." },
+  { id: 203, type: "mcq", topic: "Data Structures Matching", question: "Which data structure is a hierarchical structure with a root and children?", choices: ["Stack", "Queue", "Tree", "Linked List", "Graph"], correctAnswer: "Tree", explanation: "A tree represents hierarchical data starting from a root node." },
+  { id: 204, type: "mcq", topic: "Data Structures Matching", question: "Which data structure is a collection of nodes where each node points to the next?", choices: ["Stack", "Queue", "Tree", "Linked List", "Graph"], correctAnswer: "Linked List", explanation: "A linked list consists of sequentially linked nodes." },
+  { id: 205, type: "mcq", topic: "Data Structures Matching", question: "Which data structure is a set of vertices connected by edges and may contain cycles?", choices: ["Stack", "Queue", "Tree", "Linked List", "Graph"], correctAnswer: "Graph", explanation: "Graphs model networks with vertices and edges." },
+  
+  { id: 206, type: "mcq", topic: "Memory Terms Matching", question: "Which memory area stores activation records for method calls?", choices: ["Stack", "Heap", "Activation Record", "Garbage Collector", "Stack Overflow"], correctAnswer: "Stack", explanation: "The call stack holds method execution frames." },
+  { id: 207, type: "mcq", topic: "Memory Terms Matching", question: "Which memory area is a general-purpose memory pool for objects managed by GC?", choices: ["Stack", "Heap", "Activation Record", "Garbage Collector", "Stack Overflow"], correctAnswer: "Heap", explanation: "The heap stores dynamically allocated objects." },
+  { id: 208, type: "mcq", topic: "Memory Terms Matching", question: "Which structure contains return address, parameters and local variables for one method?", choices: ["Stack", "Heap", "Activation Record", "Garbage Collector", "Stack Overflow"], correctAnswer: "Activation Record", explanation: "Pushed to the stack for each method call." },
+  { id: 209, type: "mcq", topic: "Memory Terms Matching", question: "Which component automatically cleans unreachable objects?", choices: ["Stack", "Heap", "Activation Record", "Garbage Collector", "Stack Overflow"], correctAnswer: "Garbage Collector", explanation: "The GC frees heap memory automatically." },
+  { id: 210, type: "mcq", topic: "Memory Terms Matching", question: "What occurs when the stack exceeds its limit, such as during infinite recursion?", choices: ["Stack", "Heap", "Activation Record", "Garbage Collector", "Stack Overflow"], correctAnswer: "Stack Overflow", explanation: "Infinite recursion crashes the stack." },
+  
+  { id: 211, type: "mcq", topic: "Stack Types Matching", question: "Which stack type has a fixed size limit?", choices: ["Array Stack", "Linked List Stack", "Queue", "Heap"], correctAnswer: "Array Stack", explanation: "Array stacks have predefined capacity." },
+  { id: 212, type: "mcq", topic: "Stack Types Matching", question: "Which stack type requires extra memory per item because of pointers?", choices: ["Array Stack", "Linked List Stack", "Binary Tree", "Graph"], correctAnswer: "Linked List Stack", explanation: "Linked lists require next-pointers." },
+  { id: 213, type: "mcq", topic: "Stack Types Matching", question: "Which stack type is more likely to overflow because of predefined capacity?", choices: ["Array Stack", "Linked List Stack", "Queue", "Array"], correctAnswer: "Array Stack", explanation: "Array stacks cannot grow beyond their fixed array size." },
+  { id: 214, type: "mcq", topic: "Stack Types Matching", question: "Which stack type can grow dynamically until memory is exhausted?", choices: ["Array Stack", "Linked List Stack", "Binary Tree", "Linked List"], correctAnswer: "Linked List Stack", explanation: "Linked list stacks dynamically allocate nodes." }
+];
+
+/* ========================================================
+   TRACING & APPLICATIONS DATA
+   ======================================================== */
+const TRACING_QUESTIONS = [
+  { id: 301, type: "tracing", topic: "Tracing & Applications", title: "6.1 Linked List Tracing", question: "Given the linked list: 10 → 20 → 30 → 40 → null\nTrace the output of the following pseudocode:\n\np = head\nprint(p.data)\np = p.next\nprint(p.data)\np = p.next.next\nprint(p.data)\n\nOutput: _____________", modelAnswer: "Output: 10, 20, 40" },
+  { id: 302, type: "tracing", topic: "Tracing & Applications", title: "6.2 Linked List Insertion (Diagram)", question: "You have a list: start → [5] → [15] → [25] → null.\nDraw the linked list diagram after executing the following C# code (assume temp is a new node with data = 20):\n\nNode p = head;\nwhile (p.data != 15)\n    p = p.next;\ntemp.next = p.next;\np.next = temp;\n\nFinal list: _________________________________", modelAnswer: "Final list: start → [5] → [15] → [20] → [25] → null" },
+  { id: 303, type: "tracing", topic: "Tracing & Applications", title: "6.3 Stack Tracing (Array of size 5)", question: "Start empty. Perform:\nPush 10 → Push 20 → Pop → Push 30 → Push 40 → Pop → Pop\nShow top index and array contents after each step.", modelAnswer: "1. Push 10: top = 0, Array = [10]\n2. Push 20: top = 1, Array = [10, 20]\n3. Pop: top = 0, Array = [10]\n4. Push 30: top = 1, Array = [10, 30]\n5. Push 40: top = 2, Array = [10, 30, 40]\n6. Pop: top = 1, Array = [10, 30]\n7. Pop: top = 0, Array = [10]" },
+  { id: 304, type: "tracing", topic: "Tracing & Applications", title: "6.4 Queue Tracing (Array of size 5)", question: "Start empty. Perform:\nEnqueue 5 → Enqueue 15 → Dequeue → Enqueue 25 → Enqueue 35 → Dequeue\nShow front, rear, and array contents after each step.", modelAnswer: "1. Enqueue 5: front = 0, rear = 0, Queue = [5]\n2. Enqueue 15: front = 0, rear = 1, Queue = [5, 15]\n3. Dequeue: front = 1, rear = 1, Queue = [-, 15]\n4. Enqueue 25: front = 1, rear = 2, Queue = [-, 15, 25]\n5. Enqueue 35: front = 1, rear = 3, Queue = [-, 15, 25, 35]\n6. Dequeue: front = 2, rear = 3, Queue = [-, -, 25, 35]" },
+  { id: 305, type: "tracing", topic: "Tracing & Applications", title: "6.5 Reverse a Word Using a Stack", question: "Describe the steps to reverse the word “STACK” using a stack. What is the result?", modelAnswer: "Push S, T, A, C, K onto the stack, then pop all characters.\nResult: KCATS" },
+  { id: 306, type: "tracing", topic: "Tracing & Applications", title: "6.6 Balanced Parentheses", question: "Use the stack method to check if the following expression is balanced:\n{[()]()}\nShow the stack after each character.", modelAnswer: "Balanced.\nStack trace:\n{ -> push\n[ -> push\n( -> push\n) -> pop\n] -> pop\n( -> push\n) -> pop\n} -> pop" },
+  { id: 307, type: "tracing", topic: "Tracing & Applications", title: "6.7 RPN Evaluation", question: "Evaluate the following RPN expression step by step using a stack:\n5 3 + 8 2 - *", modelAnswer: "Push 5\nPush 3\nApply + => 8\nPush 8\nPush 2\nApply - => 6\nApply * => 48\n\nFinal answer: 48" },
+  { id: 308, type: "tracing", topic: "Tracing & Applications", title: "6.8 Recursive Function Error", question: "Analyze the error in this recursive function:\n\nint factorial(int n) {\n    return factorial(n - 1) * n;\n}\n\nWhat is missing and what will happen when it runs?", modelAnswer: "Missing base case.\nThe function will call itself forever until stack overflow occurs." },
+  { id: 309, type: "tracing", topic: "Tracing & Applications", title: "6.9 Write a Recursive Function", question: "Write a recursive function int countZeros(int n) that counts the number of zero digits in a non-negative integer n.\nHint: base case when n < 10; recursive case: check last digit n % 10 and call on n / 10.", modelAnswer: "<pre style=\"font-family: Consolas, monospace; white-space: pre-wrap; margin: 0; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);\">\nint countZeros(int n) {\n    if (n < 10) {\n        if (n == 0) return 1;\n        else return 0;\n    }\n    int lastDigitCount = (n % 10 == 0) ? 1 : 0;\n    return lastDigitCount + countZeros(n / 10);\n}\n</pre>" },
+  { id: 310, type: "tracing", topic: "Tracing & Applications", title: "6.10 Tree Traversals", question: "Consider the following binary tree (ASCII):\n      A\n     / \\\n    B   C\n   / \\   \\\n  D   E   F\n         /\n        G\n\nWrite the three traversals:\na) Preorder (NLR): ________________\nb) Inorder (LNR): ________________\nc) Postorder (LRN): ________________", modelAnswer: "Preorder (NLR): A, B, D, E, C, F, G\nInorder (LNR): D, B, E, A, C, G, F\nPostorder (LRN): D, E, B, G, F, C, A" },
+  { id: 311, type: "tracing", topic: "Tracing & Applications", title: "6.11 Tree Construction from Traversals", question: "Construct the unique binary tree from:\n• Inorder: D, B, E, A, F, C, G\n• Preorder: A, B, D, E, C, F, G\nDraw the tree.", modelAnswer: "<pre style=\"font-family: Consolas, monospace; white-space: pre; margin: 0; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);\">\n    A\n   / \\\n   B   C\n   / \\ / \n   D  E F  G\n</pre>" },
+  { id: 312, type: "tracing", topic: "Tracing & Applications", title: "6.12 BST Operations", question: "Start with an empty BST. Insert in order: 50, 30, 80, 20, 40, 70, 90, 35.\na) Draw the final BST.\nb) Show the tree after deleting the node with key 50 (replace with in-order successor).", modelAnswer: "Final BST:\n<pre style=\"font-family: Consolas, monospace; white-space: pre; margin: 0; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);\">\n      50\n    /    \\\n  30      80\n /  \\    /  \\\n20   40  70   90\n  \\\n  35\n</pre>\n\nAfter deleting 50:\n<pre style=\"font-family: Consolas, monospace; white-space: pre; margin: 0; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);\">\n      70\n    /    \\\n  30      80\n /  \\       \\\n20   40       90\n  \\\n  35\n</pre>" },
+  { id: 313, type: "tracing", topic: "Tracing & Applications", title: "6.13 Graph Question", question: "Consider the undirected graph:\nVertices: A, B, C, D\nEdges: A-B, A-C, B-D\n\na) What is the degree of vertex A?\nb) Is this graph connected? Why?\nc) Does it contain a cycle?", modelAnswer: "a) Degree of vertex A = 2\nb) Yes, the graph is connected because there is a path between every pair of vertices.\nc) No, it does not contain a cycle." },
+  { id: 314, type: "tracing", topic: "Tracing & Applications", title: "6.14 DFS & BFS Steps Ordering", question: "DFS – Arrange steps in correct order (write letters):\nA) Process current node\nB) Pop a node from stack, call it current\nC) Push starting node onto stack\nD) Push all child nodes of current onto stack\nE) Repeat until stack is empty\nCorrect order: ______\n\nBFS – Arrange steps in correct order:\nA) Dequeue a node, call it current\nB) Enqueue starting node\nC) Process current node\nD) Enqueue all child nodes of current\nE) Repeat until queue is empty\nCorrect order: ______", modelAnswer: "DFS correct order: C, B, A, D, E\nBFS correct order: B, A, C, D, E" }
+];
+
+/* ========================================================
+   SHORT ANSWER DATA
+   ======================================================== */
+const SHORT_ANSWER_QUESTIONS = [
+  { id: 101, type: "sa", topic: "Intro to Data Structures", question: "What is the main difference between primitive and non-primitive data structures regarding memory size?", correctAnswer: "Primitive data structures have a fixed size (e.g., int always 4 bytes); non-primitive can have dynamic size that changes during execution." },
+  { id: 102, type: "sa", topic: "Asymptotic Analysis", question: "What is the main disadvantage of the experimental method for measuring algorithm running time?", correctAnswer: "It is dependent on software/hardware and tests only a limited number of inputs." },
+  { id: 103, type: "sa", topic: "Asymptotic Analysis", question: "Give one real-world reason why analyzing an algorithm’s growth rate matters more than its exact time on small inputs.", correctAnswer: "An algorithm that works for n=1000 might take years for n=1,000,000 if its growth rate is exponential." },
+  { id: 104, type: "sa", topic: "Linked Lists", question: "Describe the steps to delete the last node from a singly linked list. Why is this more complex than deleting the first node?", correctAnswer: "Traverse to the second-last node (where p.next.next == null) and set p.next = null. This requires O(n) time, whereas deleting the first node is O(1)." },
+  { id: 105, type: "sa", topic: "Stacks & Queues", question: "What is the main difference between a stack and a queue?", correctAnswer: "Stack is LIFO (last in, first out); Queue is FIFO (first in, first out)." },
+  { id: 106, type: "sa", topic: "Stacks", question: "Why is a linked list stack considered more flexible than an array stack?", correctAnswer: "Linked list stack has no fixed size limit (grows dynamically) but uses extra memory for references." },
+  { id: 107, type: "sa", topic: "Queues", question: "How would you check if an array-based queue is empty?", correctAnswer: "Array-based queue is empty if front == -1 or front == rear + 1." },
+  { id: 108, type: "sa", topic: "Stacks", question: "What is RPN and why is it efficient for stack-based evaluation?", correctAnswer: "RPN places operator after operands (e.g., 4 2 +). It needs no parentheses and is easily evaluated with a single stack." },
+  { id: 109, type: "sa", topic: "Recursion", question: "Explain the “Three Rules of Recursion” mentioned in the lecture.", correctAnswer: "1) Code must handle all valid inputs; 2) Must have a base case (no recursive call); 3) Recursive call must make progress toward the base case." },
+  { id: 110, type: "sa", topic: "Trees", question: "Define the following tree terms: Leaf Node, Siblings, Height of a tree, Forest", correctAnswer: "Leaf: node with no children; Siblings: nodes sharing same parent; Height: max distance from root to any leaf; Forest: set of disjoint trees." },
+  { id: 111, type: "sa", topic: "Trees", question: "Explain the main difference between the sequential (array) and linked representation of a binary tree. What is a major drawback of the sequential representation for a skewed tree?", correctAnswer: "Sequential uses a fixed array with index formula; linked uses pointers. Drawback for skewed tree: requires huge array (2ⁿ⁻¹) with many empty slots." },
+  { id: 112, type: "sa", topic: "BST", question: "Describe the algorithm to find the node with the minimum key in a BST.", correctAnswer: "From root, repeatedly go to left child until null is reached – that node holds the minimum." },
+  { id: 113, type: "sa", topic: "Graphs", question: "What is the main difference between the data structures used in DFS and BFS? Name each structure.", correctAnswer: "DFS uses a stack (LIFO); BFS uses a queue (FIFO)." },
+  { id: 114, type: "sa", topic: "Graphs", question: "Give two real-world applications of graphs.", correctAnswer: "Any two: transportation networks, social networks, Google Maps, computer networks, electronic circuits." },
+  { id: 115, type: "sa", topic: "Graphs", question: "Why is an adjacency list more space-efficient than an adjacency matrix for most real-world problems?", correctAnswer: "Adjacency list stores only existing edges, O(V+E) space; for sparse graphs (E << V²) this is far more efficient than O(V²)." }
+];
+
 /* ========================================================
    QUESTION DATA — extracted from CS2102 Revision Sheet PDF
    ======================================================== */
@@ -2199,7 +2365,7 @@ let state = {
    ========================================================= */
 function setCategory(cat) {
   state.questionType = cat;
-  ['mcq','tf','completion'].forEach(id => {
+  ['mcq','tf','completion','sa','matching','tracing'].forEach(id => {
     document.getElementById('cat-'+id).classList.toggle('active', id === cat);
   });
   updateMaxQuestions();
@@ -2240,6 +2406,9 @@ function updateQCount(v) {
 
 function getPool() {
   // Each category is strictly isolated — no mixing.
+  if (state.questionType === 'tracing')    return TRACING_QUESTIONS;
+  if (state.questionType === 'sa')         return SHORT_ANSWER_QUESTIONS;
+  if (state.questionType === 'matching')   return MATCHING_QUESTIONS;
   if (state.questionType === 'mcq')        return QUESTIONS.filter(q => q.type === 'mcq' && !q.originalBlank);
   if (state.questionType === 'tf')         return QUESTIONS.filter(q => q.type === 'true_false');
   if (state.questionType === 'completion') return QUESTIONS.filter(q => Boolean(q.originalBlank));
@@ -2262,6 +2431,7 @@ function shuffle(arr) {
 function startQuiz() {
   const pool = shuffle(getPool()).slice(0, state.qCount);
   state.questions = pool.map(q => {
+    if (q.type === 'sa' || q.type === 'tracing') return { ...q };
     const shuffled = q.type === 'mcq' ? shuffle(q.choices) : q.choices;
     return { ...q, shuffledChoices: shuffled };
   });
@@ -2297,24 +2467,57 @@ function renderQuestion() {
 
   // Type badge
   const typeBadge = document.getElementById('q-type-badge');
-  if (q.type === 'mcq') {
+  if (q.type === 'tracing') {
+    typeBadge.textContent = 'Tracing & Apps'; typeBadge.className = 'q-type-badge q-type-tracing';
+  } else if (q.type === 'sa') {
+    typeBadge.textContent = 'Short Answer'; typeBadge.className = 'q-type-badge q-type-sa';
+  } else if (state.questionType === 'matching') {
+    typeBadge.textContent = 'Matching'; typeBadge.className = 'q-type-badge q-type-matching';
+  } else if (q.type === 'mcq') {
     typeBadge.textContent = 'MCQ'; typeBadge.className = 'q-type-badge q-type-mcq';
   } else {
     typeBadge.textContent = 'True / False'; typeBadge.className = 'q-type-badge q-type-tf';
   }
 
-  document.getElementById('q-topic').textContent = q.topic;
+  document.getElementById('q-topic').textContent = q.topic || q.title || "Question";
   document.getElementById('q-text').textContent = q.question;
   document.getElementById('feedback-container').innerHTML = '';
-  document.getElementById('answered-hint').textContent = 'Select an answer';
   document.getElementById('btn-next').disabled = true;
+  document.getElementById('btn-next').style.display = 'inline-block';
+  
+  if (q.type === 'sa' || q.type === 'tracing') {
+    document.getElementById('answered-hint').textContent = 'Type your answer, then review.';
+  } else {
+    document.getElementById('answered-hint').textContent = 'Select an answer';
+  }
 
   // Choices
   const container = document.getElementById('choices-container');
   container.innerHTML = '';
 
-  if (q.type === 'mcq') {
-    const labels = ['A', 'B', 'C', 'D'];
+  if (q.type === 'sa' || q.type === 'tracing') {
+    const isTracing = q.type === 'tracing';
+    const btnText = isTracing ? 'Show Model Solution' : 'Show Model Answer';
+    const boxTitle = isTracing ? 'Model Solution' : 'Model Answer';
+    const ansText = q.modelAnswer || q.correctAnswer;
+    
+    container.innerHTML = `
+      <div class="sa-container fade-in">
+        <textarea class="sa-textarea" placeholder="Your Answer" id="sa-input"></textarea>
+        <div class="sa-actions">
+          <button class="btn btn-primary" onclick="showModelAnswer()">${btnText}</button>
+        </div>
+        <div id="sa-model" class="model-answer-box" style="display:none;">
+          <div class="model-answer-title">${boxTitle}</div>
+          <div style="white-space: pre-wrap; font-family: inherit;">${ansText}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('btn-next').disabled = false;
+    document.getElementById('btn-next').textContent =
+      state.currentIdx + 1 < state.questions.length ? 'Next →' : 'Finish 🏁';
+  } else if (q.type === 'mcq') {
+    const labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     q.shuffledChoices.forEach((choice, i) => {
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
@@ -2486,6 +2689,12 @@ function timeUp() {
     state.currentIdx + 1 < state.questions.length ? 'Next →' : 'Finish 🏁';
 }
 
+function showModelAnswer() {
+  document.getElementById('sa-model').style.display = 'block';
+  document.getElementById('sa-input').disabled = true;
+  document.getElementById('answered-hint').textContent = 'Compare your answer with the model answer.';
+}
+
 /* =========================================================
    NEXT QUESTION / FINISH
    ========================================================= */
@@ -2511,6 +2720,33 @@ function showResults() {
   showScreen('result-screen');
 
   const total = state.questions.length;
+  
+  if (state.questionType === 'sa' || state.questionType === 'tracing') {
+    const isTracing = state.questionType === 'tracing';
+    const msg = isTracing 
+      ? `You completed ${total} Tracing & Application Problems.` 
+      : `You completed ${total} Short Answer questions (Manual Grading Mode).`;
+
+    document.getElementById('result-emoji').textContent = '✅';
+    document.getElementById('result-title').textContent = 'Completed!';
+    document.getElementById('result-subtitle').textContent = msg;
+
+    document.getElementById('score-pct').textContent = '-';
+    document.getElementById('r-correct').textContent = '-';
+    document.getElementById('r-wrong').textContent = '-';
+    document.getElementById('r-total').textContent = total;
+    document.getElementById('r-time').textContent = formatTime(state.totalTimeUsed);
+
+    const ring = document.getElementById('ring-progress');
+    ring.style.transition = 'none';
+    ring.style.strokeDashoffset = 0; // Full ring for completion
+
+    document.getElementById('review-btn').style.display = 'none';
+    document.getElementById('review-section').style.display = 'none';
+    state.isReviewOpen = false;
+    return;
+  }
+
   const correct = state.score;
   const wrong = total - correct;
   const pct = Math.round((correct / total) * 100);
